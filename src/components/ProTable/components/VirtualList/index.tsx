@@ -136,7 +136,7 @@ export default defineComponent<VirtualListProps>(function VirtualList() {
                     <div
                       class='td-item'
                       style={{
-                        width: `${(thEls.value[ity]?.offsetWidth || itex.width) - 1}px`,
+                        width: `${(thEls.value[ity]?.offsetWidth || itex.width)}px`,
                         ...obj,
                         ...rowSpanStyle,
                         ...cellProps?.style as Record<string, string>

@@ -47,7 +47,7 @@ export default defineComponent(function myLayout() {
       </LayoutSider>
       <LayoutContent>
         <div
-          class='content'
+          class='content1'
           style={{ marginLeft: collapse.value ? '80px' : '200px' }}
         >
           <RouterView />

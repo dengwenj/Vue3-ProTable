@@ -146,15 +146,22 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
         fixed: 'left',
         width: 60,
         customRender(opt: Opt) {
-          return <div>{opt.record.idx || opt.index + 1}</div>
+          return <div>{opt.record.idx + 1 ?? opt.index + 1}</div>
         }
       })
     }
 
+    let checkboxColumns: any[] = [];
     (notHideInTableColumns.value as TableColumnsType).forEach((item, index) => {
       // 自定义的 body 没有选项，自己加
-      if (isVirtual && attrs.rowSelection && notHideInTableColumns.value[0].dataIndex !== 'checkbox') {
-        notHideInTableColumns.value.unshift({
+      if (
+        isVirtual
+        && attrs.rowSelection
+        && notHideInTableColumns.value[0].dataIndex !== 'checkbox'
+        // 只来一次
+        && checkboxColumns.length === 0
+      ) {
+        checkboxColumns.unshift({
           // title: () => {
           //   return <Checkbox  />
           // },
@@ -275,6 +282,8 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
        * 递归添加单元格点击事件
        */
       function rCell(columnsItem: TQColumnType) {
+        // console.log(columnsItem, 'wwwkwk');
+
         if (columnsItem.children?.length) {
           for (const cItex of columnsItem.children) {
             rCell(cItex)
@@ -283,6 +292,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
           // 说明没有孩子
           // 如果外层有先把外层的保存起来
           const outCustomCell = columnsItem.customCell
+          // console.log(item, 'outCustomCell');
           // 点击单元格
           columnsItem.customCell = (record, rowIndx, column) => {
             const props = outCustomCell?.(record, rowIndx, column)
@@ -296,8 +306,8 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
             } : {}
             return {
               onClick(e) {
+                console.log("看情况连连看情侣款");
                 click?.(e)
-
                 if (column?.title === '操作' || attrs.cellBGC === false) {
                   return
                 }
@@ -315,6 +325,10 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
       }
       rCell(item)
     })
+    notHideInTableColumns.value = [
+      ...checkboxColumns,
+      ...notHideInTableColumns.value
+    ]
   }, { immediate: true })
 
   /**
@@ -324,7 +338,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
     notHideInTableColumns.value = notHideInTableColumns.value.map((item) => {
       return {
         ...item,
-        title: ['function', 'string'].includes(typeof item.title) ? item.title : sortVirtualNode(item)
+        title: ['function', 'string', 'undefined'].includes(typeof item.title) ? item.title : sortVirtualNode(item)
       }
     })
   })
@@ -493,7 +507,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
         if (!isFistFilter) {
           filterList = data.filter((item) => {
             for (const itex of filters[key]) {
-              if ((item[key] || '').includes(itex)) {
+              if ((item[key] || '') === itex) {
                 return item
               }
             }
@@ -504,7 +518,8 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
         } else {
           filterList = filterList.filter((item) => {
             for (const itex of filters[key]) {
-              if ((item[key] || '').includes(itex)) {
+              // (item[key] || '').includes(itex)
+              if ((item[key] || '') === itex) {
                 return item
               }
             }
@@ -775,8 +790,6 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   })
 
   return () => {
-    console.log(attrs.search, 'ss');
-
     return <div
       class={`pro_table ${attrs.classKey || ''}`}
       style={attrs.tableWidth ? { width: `${attrs.tableWidth}px` } : {}}
@@ -892,7 +905,6 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
                         <InputSearch
                           value={searchAll.value}
                           placeholder='可搜索数据'
-                          size='small'
                           style={{ width: '180px' }}
                           allowClear
                           onSearch={(val) => handleSearchAllData(val)}

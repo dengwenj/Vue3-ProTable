@@ -24,6 +24,14 @@ interface DataItem {
 export default defineComponent(function AdvancedTable() {
   const columns = computed<TableColumnsType<DataItem>>(() => [
     {
+      title: '我是必填项',
+      dataIndex: 'rules',
+      hideInTable: true,
+      formItemProps: {
+        rules: [{ message: '此项必填', required: true }]
+      }
+    },
+    {
       title: '标签',
       dataIndex: 'tag',
       width: 100,
@@ -133,6 +141,7 @@ export default defineComponent(function AdvancedTable() {
         </Dropdown>
       ]}
       search={{
+        labelWidth: 100,
         toolBarRender() {
           return [
             <Button>导出</Button>
