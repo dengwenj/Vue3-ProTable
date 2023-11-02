@@ -29,11 +29,10 @@ export default defineComponent(function myLayout() {
     selectedKeys.value = [data.key as string]
   }
 
-
   return () => (
     <Layout>
-      <LayoutSider collapsible width={220}>
-        <div class='logo'>Vue3-ProTable</div>
+      <LayoutSider collapsible>
+        <div class='logo'>ProTable</div>
         <Menu
           theme="dark"
           mode="inline"
