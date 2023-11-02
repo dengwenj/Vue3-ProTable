@@ -1,0 +1,43 @@
+.operate-content {
+  padding: 5px 0px 10px 10px;
+  width: 220px;
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f1f1;
+  }
+  .content {
+    height: 260px;
+    overflow-y: scroll;
+    .item {
+      display: flex;
+      position: relative;
+      align-items: center;
+      width: 100%;
+      margin-top: 5px;
+      .ant-checkbox-wrapper {
+        width: 100%;
+      }
+      .icon {
+        cursor: move;
+        padding-right: 15px;
+      }
+      .top-bottom {
+        display: none;
+        position: absolute;
+        right: 0;
+        :hover {
+          background-color: #fff;
+        }
+      }
+      :hover {
+        background-color: #f1f1f1;
+        border-radius: 5px;
+      }
+    }
+    .item:hover .top-bottom {
+      display: block;
+    }
+  }
+}

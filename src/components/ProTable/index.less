@@ -1,0 +1,61 @@
+.pro_table {
+  .ant-select-dropdown {
+    // 由于在主应用中样式有问题，改变下 top
+    // 没有降级处理
+    top: -140px !important;
+  }
+  .ellipsis {
+    display: flex;
+    .tooltip {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .ant-table-title {
+    padding: 3px !important;
+  }
+  .title {
+    display: flex;
+    justify-content: space-between;
+    .tool {
+      display: flex;
+      align-items: center;
+      .search-all {
+        margin-right: 20px;
+      }
+      .reload {
+        margin-right: 16px;
+        font-size: 15px;
+      }
+      .tool-bar {
+        margin-right: 20px;
+      }
+    }
+  }
+  .my-footer {
+    display: flex;
+    justify-content: space-between;
+    .c-footer {
+      flex: 1;
+    }
+    .total {
+      padding-right: 5px;
+    }
+  }
+  .sort_virtual {
+    display: flex;
+    justify-content: space-between;
+    .ad {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+      cursor: pointer;
+    }
+  }
+  .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+    background: #e3e5e8;
+  }
+}
