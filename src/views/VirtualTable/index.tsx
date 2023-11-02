@@ -8,7 +8,7 @@ import { computed, defineComponent, ref } from "vue"
 import ProTable from "@/components/ProTable"
 
 import type { TQProTableInstance, TableColumnsType } from "@/components/ProTable/types"
-import { Button, Select, Tag } from "ant-design-vue"
+import { Button, Select, Space, Tag } from "ant-design-vue"
 import dayjs from "dayjs"
 
 export default defineComponent(function VirtualTable() {
@@ -115,6 +115,20 @@ export default defineComponent(function VirtualTable() {
           }
         }
       },
+      {
+        title: '操作',
+        dataIndex: '',
+        fixed: 'right',
+        width: 120,
+        customRender(opt) {
+          return (
+            <Space>
+              <a>编辑</a>
+              <a>删除</a>
+            </Space>
+          )
+        },
+      }
     ]
   })
 

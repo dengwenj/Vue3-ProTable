@@ -108,7 +108,7 @@ export default defineComponent<VirtualListProps>(function VirtualList() {
                   // 移动多少
                   const offset = [...thEls.value].filter((_, idz) => idz < ity).reduce((pre, item) => pre + (item.offsetWidth as number), 0)
                   const obj: StyleValue = itex.fixed ? {
-                    zIndex: 1,
+                    zIndex: 9999,
                     background: '#fff',
                     position: 'sticky',
                     [itex.fixed as 'left' | 'right']: `${itex.fixed === 'left' ? offset : 0}px`,
