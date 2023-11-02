@@ -146,7 +146,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
         fixed: 'left',
         width: 60,
         customRender(opt: Opt) {
-          return <div>{opt.record.idx + 1 ?? opt.index + 1}</div>
+          return <div>{(opt.record.idx ? opt.record.idx + 1 : undefined) ?? opt.index + 1}</div>
         }
       })
     }
