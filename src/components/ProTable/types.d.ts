@@ -185,9 +185,6 @@ export interface TQProTableProps<T = any> extends TableProps<T> {
   formProps?: FormProps
   // 重置表单时触发
   onReset?: () => void
-  // 表头是否允许拖拽
-  isRowDrag?: boolean
-  onRowDrag?: (notHideInTableList: Record<string, any>[]) => void
   // 是否开启虚拟滚动，默认 true
   isVirtual?: boolean,
   // 设置行高 默认 40

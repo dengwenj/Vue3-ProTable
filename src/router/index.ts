@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import BaseTable from '@/views/BaseTable'
 import AdvancedTable from '@/views/AdvancedTable'
 import VirtualTable from '@/views/VirtualTable'
 import Home from '@/views/Home'
@@ -15,10 +14,6 @@ const router = createRouter({
     {
       path: '/home',
       component: Home
-    },
-    {
-      path: '/basetable',
-      component: BaseTable,
     },
     {
       path: '/advancedtable',

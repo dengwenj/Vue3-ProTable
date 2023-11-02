@@ -6,10 +6,6 @@ const menuList: ItemType[] = [
     label: '首页',
   },
   {
-    key: '/basetable',
-    label: '基础表格',
-  },
-  {
     key: '/advancedtable',
     label: '高级表格',
   },

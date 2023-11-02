@@ -40,7 +40,6 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
     isInitRequest = true,
     request,
     onChange,
-    search,
     isVirtual = false,
     rowHeight: rHeight = 26,
     isShowToolRender = true,
@@ -775,17 +774,19 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
     heightY: heightY
   })
 
-  return () => (
-    <div
+  return () => {
+    console.log(attrs.search, 'ss');
+
+    return <div
       class={`pro_table ${attrs.classKey || ''}`}
       style={attrs.tableWidth ? { width: `${attrs.tableWidth}px` } : {}}
     >
       {/* 高级 form 组件 */}
       {
-        search !== false && (
+        attrs.search !== false && (
           <TQProForm
             ref={tQProFormRef}
-            search={search}
+            search={attrs.search}
             formListData={notHideInSearchColumns.value}
             onReset={handleReset}
             // 点击收起展开重新计算 table 高度
@@ -935,5 +936,5 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
         }}
       </Table>
     </div>
-  )
+  }
 })
