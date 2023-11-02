@@ -7,8 +7,15 @@ import { defineComponent } from "vue"
 
 import Layout from "./views/Layout"
 
+import zhCN from 'ant-design-vue/es/locale/zh_CN'
+import 'dayjs/locale/zh-cn'
 import './App.less'
+import { ConfigProvider } from "ant-design-vue"
 
 export default defineComponent(function App() {
-  return () => <Layout />
+  return () => (
+    <ConfigProvider locale={zhCN}>
+      <Layout />
+    </ConfigProvider>
+  )
 })

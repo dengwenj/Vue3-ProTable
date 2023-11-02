@@ -113,15 +113,15 @@ export default defineComponent<ProFormProps>(function ProForm(_, {
         if (['input', 'radio', 'textarea', 'inputSearchFillIn'].includes(valueType)) {
           formState.value[dataIndex as string] = val.target.value
         } else {
-          item.fieldProps?.compoenntProps.onSelfChange?.(val, args)
+          item.fieldProps?.componentProps.onSelfChange?.(val, args)
           formState.value[dataIndex as string] = val
         }
 
         // 进行复制
         if (
           item.valueType === 'select'
-          && !item.fieldProps?.compoenntProps.mode
-          && item.fieldProps?.compoenntProps.showSearch
+          && !item.fieldProps?.componentProps.mode
+          && item.fieldProps?.componentProps.showSearch
         ) {
           fnCopy(args[0].label)
         }
@@ -140,7 +140,7 @@ export default defineComponent<ProFormProps>(function ProForm(_, {
           placeholder={`请输入${item.title}`}
           allowClear
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
           autocomplete="off"
         />
       ),
@@ -152,7 +152,7 @@ export default defineComponent<ProFormProps>(function ProForm(_, {
           enterButton
           autocomplete="off"
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       inputSearchFillIn: (
@@ -162,7 +162,7 @@ export default defineComponent<ProFormProps>(function ProForm(_, {
           enterButton
           autocomplete="off"
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       textarea: (
@@ -172,7 +172,7 @@ export default defineComponent<ProFormProps>(function ProForm(_, {
           showCount
           autocomplete="off"
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       inputNumber: (
@@ -180,7 +180,7 @@ export default defineComponent<ProFormProps>(function ProForm(_, {
           placeholder={`请输入${item.title}`}
           autocomplete="off"
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       select: (
@@ -190,80 +190,80 @@ export default defineComponent<ProFormProps>(function ProForm(_, {
           autocomplete="off"
           {...commonProps}
           options={options}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       datePicker: (
         <DatePicker
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       monthPicker: (
         <DatePicker.MonthPicker
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       quarterPicker: (
         <DatePicker.QuarterPicker
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       rangePicker: (
         <DatePicker.RangePicker
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       weekPicker: (
         <DatePicker.WeekPicker
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       yearPicker: (
         <DatePicker.YearPicker
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       radio: (
         <Radio.Group
           {...commonProps}
           options={item.options}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       checkbox: (
         <Checkbox.Group
           options={item.options}
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       switch: (
         <Switch
           checked={formState.value[dataIndex as string]}
           onChange={(val) => formState.value[dataIndex as string] = val}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       timePicker: (
         <TimePicker
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       upload: (
         <Upload
           fileList={formState.value[dataIndex as string]}
           onChange={(val) => formState.value[dataIndex as string] = val.fileList}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         >
-          <Button size='small'><UploadOutlined />
-            {(item.fieldProps?.compoenntProps as any).uploadText || '点击上传'}
+          <Button><UploadOutlined />
+            {(item.fieldProps?.componentProps as any).uploadText || '点击上传'}
           </Button>
         </Upload>
       ),
@@ -272,14 +272,14 @@ export default defineComponent<ProFormProps>(function ProForm(_, {
           autocomplete="off"
           treeData={item.options || []}
           {...commonProps}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       cascader: (
         <Cascader
           {...commonProps}
           options={item.options || []}
-          {...item.fieldProps?.compoenntProps as any}
+          {...item.fieldProps?.componentProps as any}
         />
       ),
       doubleDatePicker: (
@@ -365,7 +365,7 @@ export default defineComponent<ProFormProps>(function ProForm(_, {
                                     value={formState.value[itex]}
                                     onChange={(val) => formState.value[itex] = val}
                                     placement='bottomRight'
-                                    {...item.fieldProps?.compoenntProps as any}
+                                    {...item.fieldProps?.componentProps as any}
                                   />
                                   {idx === 0 && <span>~</span>}
                                 </div>
@@ -393,12 +393,12 @@ export default defineComponent<ProFormProps>(function ProForm(_, {
                     }
                     {
                       search?.isShowDefaultReset !== false && (
-                        <Button size='small' onClick={handleReset}>{search?.resetText || '重置'}</Button>
+                        <Button onClick={handleReset}>{search?.resetText || '重置'}</Button>
                       )
                     }
                     {
                       search?.isShowDefaultQuery !== false && (
-                        <Button loading={attrs.queryLoading} size='small' type='primary' htmlType='submit'>{search?.searchText || '查询'}</Button>
+                        <Button loading={attrs.queryLoading} type='primary' htmlType='submit'>{search?.searchText || '查询'}</Button>
                       )
                     }
 

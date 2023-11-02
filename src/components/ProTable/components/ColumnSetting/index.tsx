@@ -4,7 +4,7 @@
  * @description 列设置
  */
 import { defineComponent, useAttrs } from "vue"
-import { Button, Dropdown, Menu } from "ant-design-vue"
+import { Button, Dropdown, Menu, Tooltip } from "ant-design-vue"
 import { SettingOutlined } from '@ant-design/icons-vue'
 
 import OperateContent from "./components/OperateContent"
@@ -32,13 +32,12 @@ export default defineComponent<OperateContentProps>(function ColumnSetting(_, {
         }
         trigger='click'
       >
-        <Button
-          type='primary'
-          size='small'
-          icon={<SettingOutlined />}
-        >
-          列设置
-        </Button>
+        <Tooltip title='列设置'>
+          <Button
+            type='primary'
+            icon={<SettingOutlined />}
+          />
+        </Tooltip>
       </Dropdown>
     </div>
   )

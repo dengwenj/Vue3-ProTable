@@ -46,58 +46,58 @@ type OtherType = {
 }
 type FieldPropsType = {
   type: 'input'
-  compoenntProps: InputProps & OtherType
+  componentProps: InputProps & OtherType
 } | {
   type: "select",
-  compoenntProps: SelectProps & OtherType
+  componentProps: SelectProps & OtherType
 } | {
   type: 'inputNumber',
-  compoenntProps: InputNumberProps & OtherType
+  componentProps: InputNumberProps & OtherType
 } | {
   type: 'datePicker',
-  compoenntProps: DatePickerProps & OtherType
+  componentProps: DatePickerProps & OtherType
 } | {
   type: 'radio',
-  compoenntProps: RadioProps & OtherType
+  componentProps: RadioProps & OtherType
 } | {
   type: 'checkbox',
-  compoenntProps: CheckboxProps & OtherType
+  componentProps: CheckboxProps & OtherType
 } | {
   type: 'switch',
-  compoenntProps: SwitchProps & OtherType
+  componentProps: SwitchProps & OtherType
 } | {
   type: 'treeSelect',
-  compoenntProps: TreeSelectProps & OtherType
+  componentProps: TreeSelectProps & OtherType
 } | {
   type: 'upload',
-  compoenntProps: UploadProps & OtherType & { uploadText?: string }
+  componentProps: UploadProps & OtherType & { uploadText?: string }
 } | {
   type: 'timePicker',
-  compoenntProps: TimePickerProps & OtherType
+  componentProps: TimePickerProps & OtherType
 } | {
   type: 'cascader',
-  compoenntProps: CascaderProps & OtherType
+  componentProps: CascaderProps & OtherType
 } | {
   type: 'monthPicker',
-  compoenntProps: Record<string, any> & OtherType
+  componentProps: Record<string, any> & OtherType
 } | {
   type: 'quarterPicker',
-  compoenntProps: Record<string, any> & OtherType
+  componentProps: Record<string, any> & OtherType
 } | {
   type: 'rangePicker',
-  compoenntProps: Record<string, any> & OtherType
+  componentProps: Record<string, any> & OtherType
 } | {
   type: 'weekPicker',
-  compoenntProps: Record<string, any> & OtherType
+  componentProps: Record<string, any> & OtherType
 } | {
   type: 'yearPicker'
-  compoenntProps: Record<string, any> & OtherType
+  componentProps: Record<string, any> & OtherType
 } | {
   type: 'inputSearch'
-  compoenntProps: InputSearch & OtherType
+  componentProps: InputSearch & OtherType
 } | {
   type: 'textarea',
-  compoenntProps: TextAreaProps & OtherType
+  componentProps: TextAreaProps & OtherType
 }
 
 export interface SearchConfig {

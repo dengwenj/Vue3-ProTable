@@ -17,6 +17,7 @@ export default defineComponent(function myLayout() {
   const route = useRoute()
 
   const selectedKeys = ref([route.path])
+  const collapse = ref(false)
 
   onMounted(() => {
     setTimeout(() => {
@@ -31,7 +32,10 @@ export default defineComponent(function myLayout() {
 
   return () => (
     <Layout>
-      <LayoutSider collapsible>
+      <LayoutSider
+        collapsible
+        onCollapse={(coll) => collapse.value = coll}
+      >
         <div class='logo'>ProTable</div>
         <Menu
           theme="dark"
@@ -42,7 +46,12 @@ export default defineComponent(function myLayout() {
         />
       </LayoutSider>
       <LayoutContent>
-        <RouterView />
+        <div
+          class='content'
+          style={{ marginLeft: collapse.value ? '80px' : '200px' }}
+        >
+          <RouterView />
+        </div>
       </LayoutContent>
     </Layout>
   )
