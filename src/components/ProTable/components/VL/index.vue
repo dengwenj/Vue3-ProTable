@@ -119,16 +119,6 @@ export default {
     );
 
     onMounted(() => {
-      // 进入该页面，主应用进入到子应用该页面，TODO!!! offsetWidth 为 0
-      window.$wujie?.bus.$on("tQMes", (path) => {
-        elThList.value.forEach((item) => {
-          if (item.style.position !== 'sticky') {
-            item.style.transform = `translateX(0px)`
-          }
-        })
-        updateVb(0)
-      });
-
       // 获取 table 的 表头 th
       elThList.value = document.querySelectorAll(`.${props.classKey} tr th`) || []
       if (props.pageMode) {
