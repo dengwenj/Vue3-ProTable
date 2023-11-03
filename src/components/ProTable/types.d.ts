@@ -216,7 +216,6 @@ export interface TQProTableProps<T = any> extends TableProps<T> {
 
 export interface TableEmit {
   reset: () => void
-  rowDrag: (notHideInTableList: Record<string, any>[]) => void
   query: (values: Record<string, any>, callback: () => void) => void
   filterListChange: (filterList: Record<string, any>[]) => void
 }
