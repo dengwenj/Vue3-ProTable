@@ -75,7 +75,7 @@ export default defineComponent(function VirtualTable() {
       {
         title: '地址',
         dataIndex: 'address',
-        width: 200,
+        width: 150,
         customFilterDropdown: true,
       },
       {
@@ -87,13 +87,13 @@ export default defineComponent(function VirtualTable() {
         virtualSort: {
           isFieldDate: true
         },
-        width: 200,
+        width: 160,
         hideInSearch: true
       },
       {
         title: '合并',
         dataIndex: 'rowSpan',
-        width: 300,
+        width: 150,
         hideInSearch: true,
         customFilterDropdown: true,
         customCell(record, index) {
@@ -118,7 +118,6 @@ export default defineComponent(function VirtualTable() {
       {
         title: '操作',
         dataIndex: '',
-        fixed: 'right',
         width: 120,
         customRender(opt) {
           return (
