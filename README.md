@@ -1,4 +1,4 @@
-# 基于 Vue3 + Ant Design Vue 实现的 ProTable，用于快速开发
+# ProTable，用于快速开发
 
 ### 安装
 ```
