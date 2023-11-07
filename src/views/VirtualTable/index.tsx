@@ -5,7 +5,7 @@
  */
 import { computed, defineComponent, ref } from "vue"
 
-import ProTable from "@/components/ProTable"
+import { ProTable } from 'vue3-procomponents'
 
 import type { TQProTableInstance, TableColumnsType } from "@/components/ProTable/types"
 import { Button, Select, Space, Tag } from "ant-design-vue"
