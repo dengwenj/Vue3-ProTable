@@ -2,7 +2,7 @@
 
 ### 安装
 ```
-  npm install vue3-procomponents
+npm install vue3-procomponents
 ```
 ### 支持 jsx、vue 文件
 

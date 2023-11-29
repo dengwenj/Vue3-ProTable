@@ -5,11 +5,11 @@
  */
 import { computed, defineComponent, ref } from "vue"
 
-import { ProTable } from 'vue3-procomponents'
-
-import type { TQProTableInstance, TableColumnsType } from "@/components/ProTable/types"
+import { ProTable } from "@/components"
 import { Button, Select, Space, Tag } from "ant-design-vue"
 import dayjs from "dayjs"
+
+import type { TQProTableInstance, TableColumnsType } from "@/components/ProTable/types"
 
 export default defineComponent(function VirtualTable() {
   const seleRowKey = ref<any[]>([])

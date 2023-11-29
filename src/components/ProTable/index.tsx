@@ -87,6 +87,10 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   const oldSortOrder = ref<string>('')
   // 单元格背景色
   const cellPosition = ref('')
+  // mousedown tb 坐标
+  const mousedownCood = ref('')
+  // mousemove tb 坐标
+  const mousemoveCood = ref('')
 
   onMounted(() => {
     // 首次是否发送请求
@@ -107,6 +111,27 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
     } else {
       initEmptyQuery.value = true
     }
+  })
+
+  onMounted(() => {
+    const tableEl = document.querySelector('.ant-table-container')
+
+    const mousedownCall = (e: any) => {
+      mousedownCood.value = e.target.id
+      tableEl?.addEventListener('mousemove', mousemoveCall)
+    }
+
+    const mousemoveCall = (ev: any) => {
+      mousemoveCood.value = ev.target.id
+      console.log(mousemoveCood.value);
+      console.log(mousedownCood.value);
+    }
+
+    tableEl?.addEventListener('mousedown', mousedownCall)
+
+    tableEl?.addEventListener('mouseup', () => {
+      tableEl.removeEventListener('mousemove', mousemoveCall)
+    })
   })
 
   // 排序点击的 DOM
@@ -306,7 +331,6 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
             } : {}
             return {
               onClick(e) {
-                console.log("看情况连连看情侣款");
                 click?.(e)
                 if (column?.title === '操作' || attrs.cellBGC === false) {
                   return
@@ -317,6 +341,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
                 ...bgc,
                 ...style
               },
+              id: `${column?.dataIndex}$${(column as any).idx}$${rowIndx}`,
               // 外层写的 customCell 返回的属性值
               ...props
             }
