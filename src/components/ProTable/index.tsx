@@ -140,43 +140,51 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
       const downList = mousedownCood.value?.split('$')
       // 终点位置
       const moveList = mousemoveCood.value?.split('$')
+
+      const downX = Number(downList[1])
+      const moveX = Number(moveList[1])
+      const downY = Number(downList[2])
+      const moveY = Number(moveList[2])
+
       // 第二个元素是 x 坐标
       let b
       let f
-      if (Number(downList[1]) > Number(moveList[1])) {
-        b = Number(downList[1])
-        f = Number(moveList[1])
+      if (downX > moveX) {
+        b = downX
+        f = moveX
       } else {
-        b = Number(moveList[1])
-        f = Number(downList[1])
+        b = moveX
+        f = downX
       }
       // 第三个元素是 y 坐标
       let z
       let x
-      if (Number(downList[2]) > Number(moveList[2])) {
-        z = Number(downList[2])
-        x = Number(moveList[2])
+      if (downY > moveY) {
+        z = downY
+        x = moveY
       } else {
-        z = Number(moveList[2])
-        x = Number(downList[2])
+        z = moveY
+        x = downY
       }
+
       // 用矩阵，二维数组
       const arr: number[][] = []
+      // 背景变色，存放的id
       const arr1: string[] = []
-      // 保存批量选中的
+      // 保存批量选中的 key
       const keyList: string[] = ([])
       for (let i = f; i <= b; i++) {
         const dataIndex = notHideInTableColumns.value[i].dataIndex
         keyList.push(dataIndex)
-        dataIndexList.value = keyList
+
         for (let j = x; j <= z; j++) {
           arr.push([i, j])
           arr1.push(`${dataIndex}$${i}$${j}`)
         }
       }
-
       matriceList.value = arr
       bgcList.value = arr1
+      dataIndexList.value = keyList
 
       // 批量选中大于等于 2 个
       if (arr.length >= 2) {
