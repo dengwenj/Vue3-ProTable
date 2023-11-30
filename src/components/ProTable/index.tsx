@@ -237,7 +237,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
           const fragment2 = document.createDocumentFragment()
           dataIndexList.value.forEach((key) => {
             const td = document.createElement('td')
-            td.innerText = list[i][key]
+            td.innerText = key === "序号" ? i + 1 : list[i][key]
             fragment2.appendChild(td)
           })
           tr.appendChild(fragment2)
