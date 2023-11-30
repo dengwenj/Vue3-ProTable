@@ -91,6 +91,12 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   const mousedownCood = ref('')
   // mousemove tb 坐标
   const mousemoveCood = ref('')
+  const bgcList = ref<string[]>([])
+  // 保存批量选中的
+  const dataIndexList = ref<string[]>([])
+  const isUserSelect = ref(false)
+  // 矩阵
+  const matriceList = ref<number[][]>([])
 
   onMounted(() => {
     // 首次是否发送请求
@@ -113,24 +119,124 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
     }
   })
 
+  // 用于批量选中复制
   onMounted(() => {
     const tableEl = document.querySelector('.ant-table-container')
 
     const mousedownCall = (e: any) => {
       mousedownCood.value = e.target.id
+      // 鼠标滑动事件
       tableEl?.addEventListener('mousemove', mousemoveCall)
     }
 
     const mousemoveCall = (ev: any) => {
+      if (cellPosition.value) {
+        cellPosition.value = ''
+      }
+
       mousemoveCood.value = ev.target.id
-      console.log(mousemoveCood.value);
-      console.log(mousedownCood.value);
+
+      // 起点位置
+      const downList = mousedownCood.value?.split('$')
+      // 终点位置
+      const moveList = mousemoveCood.value?.split('$')
+      // 第二个元素是 x 坐标
+      let b
+      let f
+      if (Number(downList[1]) > Number(moveList[1])) {
+        b = Number(downList[1])
+        f = Number(moveList[1])
+      } else {
+        b = Number(moveList[1])
+        f = Number(downList[1])
+      }
+      // 第三个元素是 y 坐标
+      let z
+      let x
+      if (Number(downList[2]) > Number(moveList[2])) {
+        z = Number(downList[2])
+        x = Number(moveList[2])
+      } else {
+        z = Number(moveList[2])
+        x = Number(downList[2])
+      }
+      // 用矩阵，二维数组
+      const arr: number[][] = []
+      const arr1: string[] = []
+      // 保存批量选中的
+      const keyList: string[] = ([])
+      for (let i = f; i <= b; i++) {
+        const dataIndex = notHideInTableColumns.value[i].dataIndex
+        keyList.push(dataIndex)
+        dataIndexList.value = keyList
+        for (let j = x; j <= z; j++) {
+          arr.push([i, j])
+          arr1.push(`${dataIndex}$${i}$${j}`)
+        }
+      }
+
+      matriceList.value = arr
+      bgcList.value = arr1
+
+      // 批量选中大于 2 个
+      if (arr.length >= 2) {
+        isUserSelect.value = true
+      }
     }
 
+    // 鼠标按下时间
     tableEl?.addEventListener('mousedown', mousedownCall)
 
+    // 鼠标弹起事件
     tableEl?.addEventListener('mouseup', () => {
+      isUserSelect.value = false
       tableEl.removeEventListener('mousemove', mousemoveCall)
+    })
+
+    // 复制事件
+    document.addEventListener('copy', function (e) {
+      e.preventDefault()
+
+      const textarea = document.createElement('textarea')
+      document.body.appendChild(textarea)
+
+      const tableEl = document.createElement('table')
+      const tbodyEl = document.createElement('tbody')
+      // 创建文档片段，将标签全部放入该片段中，再统一插入doucment，这样只会渲染一次
+      const fragment = document.createDocumentFragment()
+
+      const start = matriceList.value[0][1]
+      const end = matriceList.value[matriceList.value.length - 1][1] + 1 // +1 因为 end 需要取到
+      const list = finallyDataSource.value.slice(start, end)
+
+      for (let i = 0; i < list.length; i++) {
+        const tr = document.createElement('tr')
+        const fragment2 = document.createDocumentFragment()
+        dataIndexList.value.forEach((key) => {
+          const td = document.createElement('td')
+          td.innerText = list[i][key]
+          fragment2.appendChild(td)
+        })
+        tr.appendChild(fragment2)
+        fragment.appendChild(tr)
+      }
+
+      tbodyEl.appendChild(fragment)
+      tableEl.appendChild(tbodyEl)
+      document.body.appendChild(tableEl)
+      tableEl.id = "copy_table"
+
+      const table = document.querySelector('#copy_table') as any
+      textarea.value = table.innerText
+      // selection 是当前选中的内容
+      // 给选中的内容添加多余的内容
+      e.clipboardData!.setData(
+        'text',
+        bgcList.value.length >= 2 ? textarea.value : window.getSelection()?.toString() || ""
+      )
+
+      document.body.removeChild(textarea)
+      document.body.removeChild(tableEl)
     })
   })
 
@@ -329,8 +435,15 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
             const bgc = cellPosition.value === `${column?.dataIndex}${rowIndx}` ? {
               backgroundColor: ThemeColor
             } : {}
+
+            const bgc2 = bgcList.value.includes(`${column?.dataIndex}$${(column as any).idx}$${rowIndx}`) ? {
+              backgroundColor: ThemeColor
+            } : {}
+
             return {
               onClick(e) {
+                bgcList.value = []
+
                 click?.(e)
                 if (column?.title === '操作' || attrs.cellBGC === false) {
                   return
@@ -339,6 +452,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
               },
               style: {
                 ...bgc,
+                ...bgc2,
                 ...style
               },
               id: `${column?.dataIndex}$${(column as any).idx}$${rowIndx}`,
@@ -842,7 +956,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
 
       {/* 表格 */}
       <Table
-        // bordered
+        style={isUserSelect.value ? { userSelect: 'none' } : {}}
         rowKey='id'
         loading={loading.value}
         // 是否启用虚拟列表

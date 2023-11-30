@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="test">
+    <table>
+      <tbody>
+        <tr class="tr1">
+          <td>
+            <span>hh</span>
+          </td>
+          <td>
+            <span>dd</span>
+          </td>
+          <td>
+            <span>ww</span>
+          </td>
+        </tr>
+        <tr class="tr2">
+          <td>开门硚口区</td>
+          <td>d离开了d</td>
+          <td>快乐了</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <input type="submit" name="btn_copy" value="复制" id="btn_submit" />
+  <script>
+    const ipt = document.querySelector('#btn_submit')
+    ipt.addEventListener('click', () => {
+      fn()
+    })
+
+    function fn() {
+      const input = document.createElement('textarea');
+      document.body.appendChild(input);
+      input.value = document.querySelector('.tr1').innerText;
+      input.select();
+      if (document.execCommand('copy')) {
+        console.log(document.execCommand('copy'));
+      }
+      document.body.removeChild(input);
+    }
+  </script>
+</body>
+
+</html>
