@@ -125,12 +125,15 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
 
     const mousedownCall = (e: any) => {
       let id
-      if (!e.target.id) {
-        id = e.target.parentNode.id
-      } else {
-        id = e.target.id
+      function rId(el: any) {
+        if (el.id) {
+          id = el.id
+        } else {
+          rId(el.parentNode)
+        }
       }
-      mousedownCood.value = id
+      rId(e.target)
+      mousedownCood.value = id!
       // 鼠标滑动事件
       tableEl?.addEventListener('mousemove', mousemoveCall)
     }
@@ -141,12 +144,15 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
       }
 
       let id
-      if (!ev.target.id) {
-        id = ev.target.parentNode.id
-      } else {
-        id = ev.target.id
+      function rId(el: any) {
+        if (el.id) {
+          id = el.id
+        } else {
+          rId(el.parentNode)
+        }
       }
-      mousemoveCood.value = id
+      rId(ev.target)
+      mousemoveCood.value = id!
 
       // 起点位置
       const downList = mousedownCood.value?.split('$')
