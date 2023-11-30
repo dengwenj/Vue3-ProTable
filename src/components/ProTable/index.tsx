@@ -124,7 +124,13 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
     const tableEl = document.querySelector('.ant-table-container')
 
     const mousedownCall = (e: any) => {
-      mousedownCood.value = e.target.id
+      let id
+      if (!e.target.id) {
+        id = e.target.parentNode.id
+      } else {
+        id = e.target.id
+      }
+      mousedownCood.value = id
       // 鼠标滑动事件
       tableEl?.addEventListener('mousemove', mousemoveCall)
     }
@@ -134,7 +140,13 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
         cellPosition.value = ''
       }
 
-      mousemoveCood.value = ev.target.id
+      let id
+      if (!ev.target.id) {
+        id = ev.target.parentNode.id
+      } else {
+        id = ev.target.id
+      }
+      mousemoveCood.value = id
 
       // 起点位置
       const downList = mousedownCood.value?.split('$')
