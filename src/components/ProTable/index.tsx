@@ -178,7 +178,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
       matriceList.value = arr
       bgcList.value = arr1
 
-      // 批量选中大于 2 个
+      // 批量选中大于等于 2 个
       if (arr.length >= 2) {
         isUserSelect.value = true
       }
@@ -197,46 +197,50 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
     document.addEventListener('copy', function (e) {
       e.preventDefault()
 
-      const textarea = document.createElement('textarea')
-      document.body.appendChild(textarea)
+      // 批量选中大于 1 个
+      if (bgcList.value.length > 1) {
+        const textarea = document.createElement('textarea')
+        document.body.appendChild(textarea)
 
-      const tableEl = document.createElement('table')
-      const tbodyEl = document.createElement('tbody')
-      // 创建文档片段，将标签全部放入该片段中，再统一插入doucment，这样只会渲染一次
-      const fragment = document.createDocumentFragment()
+        // 创建 table 的原因是要拿到样式一致的
+        const tableEl = document.createElement('table')
+        const tbodyEl = document.createElement('tbody')
+        // 创建文档片段，将标签全部放入该片段中，再统一插入doucment，这样只会渲染一次
+        const fragment = document.createDocumentFragment()
 
-      const start = matriceList.value[0][1]
-      const end = matriceList.value[matriceList.value.length - 1][1] + 1 // +1 因为 end 需要取到
-      const list = finallyDataSource.value.slice(start, end)
+        const start = matriceList.value[0][1]
+        const end = matriceList.value[matriceList.value.length - 1][1] + 1 // +1 因为 end 需要取到
+        const list = finallyDataSource.value.slice(start, end)
 
-      for (let i = 0; i < list.length; i++) {
-        const tr = document.createElement('tr')
-        const fragment2 = document.createDocumentFragment()
-        dataIndexList.value.forEach((key) => {
-          const td = document.createElement('td')
-          td.innerText = list[i][key]
-          fragment2.appendChild(td)
-        })
-        tr.appendChild(fragment2)
-        fragment.appendChild(tr)
+        for (let i = 0; i < list.length; i++) {
+          const tr = document.createElement('tr')
+          const fragment2 = document.createDocumentFragment()
+          dataIndexList.value.forEach((key) => {
+            const td = document.createElement('td')
+            td.innerText = list[i][key]
+            fragment2.appendChild(td)
+          })
+          tr.appendChild(fragment2)
+          fragment.appendChild(tr)
+        }
+
+        tbodyEl.appendChild(fragment)
+        tableEl.appendChild(tbodyEl)
+        document.body.appendChild(tableEl)
+        tableEl.id = "copy_table"
+
+        const table = document.querySelector('#copy_table') as any
+        textarea.value = table.innerText
+
+        // selection 是当前选中的内容
+        // 给选中的内容添加多余的内容
+        e.clipboardData!.setData('text', textarea.value)
+
+        document.body.removeChild(textarea)
+        document.body.removeChild(tableEl)
+      } else {
+        e.clipboardData!.setData('text', window.getSelection()?.toString() || "")
       }
-
-      tbodyEl.appendChild(fragment)
-      tableEl.appendChild(tbodyEl)
-      document.body.appendChild(tableEl)
-      tableEl.id = "copy_table"
-
-      const table = document.querySelector('#copy_table') as any
-      textarea.value = table.innerText
-      // selection 是当前选中的内容
-      // 给选中的内容添加多余的内容
-      e.clipboardData!.setData(
-        'text',
-        bgcList.value.length >= 2 ? textarea.value : window.getSelection()?.toString() || ""
-      )
-
-      document.body.removeChild(textarea)
-      document.body.removeChild(tableEl)
     })
   })
 
