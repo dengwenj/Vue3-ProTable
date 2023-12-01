@@ -97,6 +97,8 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   const isUserSelect = ref(false)
   // 矩阵
   const matriceList = ref<number[][]>([])
+  // 获取 table 元素
+  const tableRef = ref()
 
   onMounted(() => {
     // 首次是否发送请求
@@ -121,6 +123,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
 
   // 用于批量选中复制
   onMounted(() => {
+    // TODO 1、获取元素确定唯一性，2、有 children 会出错
     const tableEl = document.querySelector('.ant-table-container')
 
     const mousedownCall = (e: any) => {
@@ -959,163 +962,167 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   })
 
   return () => {
-    return <div
-      class={`pro_table ${attrs.classKey || ''}`}
-      style={attrs.tableWidth ? { width: `${attrs.tableWidth}px` } : {}}
-    >
-      {/* 高级 form 组件 */}
-      {
-        attrs.search !== false && (
-          <TQProForm
-            ref={tQProFormRef}
-            search={attrs.search}
-            formListData={notHideInSearchColumns.value}
-            onReset={handleReset}
-            // 点击收起展开重新计算 table 高度
-            onCollapsed={(isCollapsed) => {
-              nextTick(() => {
-                setheightY()
-              })
-            }}
-            onQuery={handleQuery}
-            isShowToolRender={isShowToolRender}
-            queryLoading={loading.value}
-          />
-        )
-      }
-
-      {/* 表格 */}
-      <Table
-        style={isUserSelect.value ? { userSelect: 'none' } : {}}
-        rowKey='id'
-        loading={loading.value}
-        // 是否启用虚拟列表
-        {...(attrs.isVirtual ? {
-          components: {
-            body: () => {
-              return (
-                <VirtualList
-                  classKey={attrs.classKey}
-                  rowHeight={attrs.rowHeight}
-                  finallyDataSource={finallyDataSource.value}
-                  notHideInTableColumns={notHideInTableColumns.value.filter((item) => item.delFlag !== 1)}
-                  heightY={attrs.scroll?.y as number || heightY.value}
-                  selectedRowKeys={selectedRowKeys.value}
-                  initEmptyQuery={initEmptyQuery.value}
-                  customRow={attrs.customRow}
-                />
-              )
-            }
-          }
-        } : {})}
-        dataSource={finallyDataSource.value}
-        customRow={(record, index) => {
-          return {
-            style: {
-              height: `${rowHeight.value}px`,
-              backgroundColor: index! % 2 === 0 ? '#fafafa' : '#fff'
-            }
-          }
-        }}
-        pagination={isVirtual ? false : {
-          total: total.value,
-          current: current.value,
-          pageSize: pageSize.value,
-          pageSizeOptions: ['10', '20', '50', '100'],
-          showTotal: (total: number) => <div>共 {total} 条</div>
-        }}
-        locale={{
-          emptyText: <Empty image={simpleImage} description={initEmptyQuery.value ? '请手动点击查询' : '暂无数据'} />
-        }}
-        onResizeColumn={(width, row) => row.width = width}
-        onChange={typeof onChange === 'function' ? onChange : handleChange}
-        {...attrs}
-        // columns 要在 attrs 在后面, item.delFlag 为 1 代表删除的
-        columns={notHideInTableColumns.value.filter((item) => item.delFlag !== 1)}
-        {...(isVirtual || attrs.defaultScroll ? {
-          scroll: { y: heightY.value, ...attrs.scroll }
-        } : {})}
-        {...(attrs.isVirtual ? {
-          footer: () => {
-            return (
-              <div class='my-footer'>
-                <div class='c-footer'>{attrs.footer?.(finallyDataSource.value)}</div>
-                {/* 这里根据可搜索数据一起的 */}
-                {isSearch && <div class='total'>总 {finallyDataSource.value.length} 条</div>}
-              </div>
-            )
-          }
-        } : {})}
+    return (
+      <div
+        class={`pro_table ${attrs.classKey || ''}`}
+        style={attrs.tableWidth ? { width: `${attrs.tableWidth}px` } : {}}
       >
-        {/* 自定义筛选插槽 */}
-        {{
-          customFilterDropdown: (info: FilterDropdownProps) => {
-            return (
-              <div>
-                {
-                  isFilterDropDownMount.value && (
-                    <FilterDropdown {...info} />
+        {/* 高级 form 组件 */}
+        {
+          attrs.search !== false && (
+            <TQProForm
+              ref={tQProFormRef}
+              search={attrs.search}
+              formListData={notHideInSearchColumns.value}
+              onReset={handleReset}
+              // 点击收起展开重新计算 table 高度
+              onCollapsed={(isCollapsed) => {
+                nextTick(() => {
+                  setheightY()
+                })
+              }}
+              onQuery={handleQuery}
+              isShowToolRender={isShowToolRender}
+              queryLoading={loading.value}
+            />
+          )
+        }
+
+        {/* 表格 */}
+        <div ref={tableRef}>
+          <Table
+            style={isUserSelect.value ? { userSelect: 'none' } : {}}
+            rowKey='id'
+            loading={loading.value}
+            // 是否启用虚拟列表
+            {...(attrs.isVirtual ? {
+              components: {
+                body: () => {
+                  return (
+                    <VirtualList
+                      classKey={attrs.classKey}
+                      rowHeight={attrs.rowHeight}
+                      finallyDataSource={finallyDataSource.value}
+                      notHideInTableColumns={notHideInTableColumns.value.filter((item) => item.delFlag !== 1)}
+                      heightY={attrs.scroll?.y as number || heightY.value}
+                      selectedRowKeys={selectedRowKeys.value}
+                      initEmptyQuery={initEmptyQuery.value}
+                      customRow={attrs.customRow}
+                    />
                   )
                 }
-              </div>
-            )
-          },
-          ...slots,
-          title: () => {
-            return (
-              <div class='title'>
-                <div>{slots.title?.()}</div>
-
-                <div class='tool'>
-                  {/* 可搜索 */}
-                  {
-                    (attrs.isVirtual && isSearch) && (
-                      <div class='search-all'>
-                        <InputSearch
-                          value={searchAll.value}
-                          placeholder='可搜索数据'
-                          style={{ width: '180px' }}
-                          allowClear
-                          onSearch={(val) => handleSearchAllData(val)}
-                          onChange={(val) => searchAll.value = val.target.value!}
-                        />
-                      </div>
-                    )
-                  }
-
-                  {/* 表格工具栏 */}
-                  <div class='tool-bar'>
-                    <Space>{attrs.toolBarRender?.()}</Space>
+              }
+            } : {})}
+            dataSource={finallyDataSource.value}
+            customRow={(record, index) => {
+              return {
+                style: {
+                  height: `${rowHeight.value}px`,
+                  backgroundColor: index! % 2 === 0 ? '#fafafa' : '#fff'
+                }
+              }
+            }}
+            pagination={isVirtual ? false : {
+              total: total.value,
+              current: current.value,
+              pageSize: pageSize.value,
+              pageSizeOptions: ['10', '20', '50', '100'],
+              showTotal: (total: number) => <div>共 {total} 条</div>
+            }}
+            locale={{
+              emptyText: <Empty image={simpleImage} description={initEmptyQuery.value ? '请手动点击查询' : '暂无数据'} />
+            }}
+            onResizeColumn={(width, row) => row.width = width}
+            onChange={typeof onChange === 'function' ? onChange : handleChange}
+            {...attrs}
+            // columns 要在 attrs 在后面, item.delFlag 为 1 代表删除的
+            columns={notHideInTableColumns.value.filter((item) => item.delFlag !== 1)}
+            {...(isVirtual || attrs.defaultScroll ? {
+              scroll: { y: heightY.value, ...attrs.scroll }
+            } : {})}
+            {...(attrs.isVirtual ? {
+              footer: () => {
+                return (
+                  <div class='my-footer'>
+                    <div class='c-footer'>{attrs.footer?.(finallyDataSource.value)}</div>
+                    {/* 这里根据可搜索数据一起的 */}
+                    {isSearch && <div class='total'>总 {finallyDataSource.value.length} 条</div>}
                   </div>
+                )
+              }
+            } : {})}
+          >
+            {/* 自定义筛选插槽 */}
+            {{
+              customFilterDropdown: (info: FilterDropdownProps) => {
+                return (
+                  <div>
+                    {
+                      isFilterDropDownMount.value && (
+                        <FilterDropdown {...info} />
+                      )
+                    }
+                  </div>
+                )
+              },
+              ...slots,
+              title: () => {
+                return (
+                  <div class='title'>
+                    <div>{slots.title?.()}</div>
 
-                  {/* 刷新 */}
-                  {
-                    attrs.search !== false && attrs.request && (
-                      <div class='reload'>
-                        <Tooltip title='刷新'>
-                          <ReloadOutlined onClick={() => reload()} />
-                        </Tooltip>
+                    <div class='tool'>
+                      {/* 可搜索 */}
+                      {
+                        (attrs.isVirtual && isSearch) && (
+                          <div class='search-all'>
+                            <InputSearch
+                              value={searchAll.value}
+                              placeholder='可搜索数据'
+                              style={{ width: '180px' }}
+                              allowClear
+                              onSearch={(val) => handleSearchAllData(val)}
+                              onChange={(val) => searchAll.value = val.target.value!}
+                            />
+                          </div>
+                        )
+                      }
+
+                      {/* 表格工具栏 */}
+                      <div class='tool-bar'>
+                        <Space>{attrs.toolBarRender?.()}</Space>
                       </div>
-                    )
-                  }
 
-                  {/* 列设置 */}
-                  {attrs.isShowColumnSetting !== false && (
-                    <div>
-                      <ColumnSetting
-                        notHideInTableColumns={notHideInTableColumns.value}
-                        onChangeColumns={(columns) => {
-                          notHideInTableColumns.value = columns
-                        }}
-                      />
+                      {/* 刷新 */}
+                      {
+                        attrs.search !== false && attrs.request && (
+                          <div class='reload'>
+                            <Tooltip title='刷新'>
+                              <ReloadOutlined onClick={() => reload()} />
+                            </Tooltip>
+                          </div>
+                        )
+                      }
+
+                      {/* 列设置 */}
+                      {attrs.isShowColumnSetting !== false && (
+                        <div>
+                          <ColumnSetting
+                            notHideInTableColumns={notHideInTableColumns.value}
+                            onChangeColumns={(columns) => {
+                              notHideInTableColumns.value = columns
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </div>
-            )
-          },
-        }}
-      </Table>
-    </div>
+                  </div>
+                )
+              },
+            }}
+          </Table>
+        </div>
+      </div>
+    )
   }
 })
