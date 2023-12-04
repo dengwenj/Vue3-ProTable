@@ -19,6 +19,7 @@ import Copyable from "./components/Copyable"
 import VirtualList from "./components/VirtualList"
 import ColumnSetting from "./components/ColumnSetting"
 import useTableHeight from "./hooks/useTableHight"
+import useBatchCopy from "./hooks/useBatchCopy"
 import { formatNumber, stringDateFormat } from "./utils"
 import { SortOrder, ThemeColor } from "./conf"
 import './index.less'
@@ -87,20 +88,23 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   const oldSortOrder = ref<string>('')
   // 单元格背景色
   const cellPosition = ref('')
-  // mousedown tb 坐标
-  const mousedownCood = ref('')
-  // mousemove tb 坐标
-  const mousemoveCood = ref('')
+  // 背景变色
   const bgcList = ref<string[]>([])
-  // 保存批量选中的
-  const dataIndexList = ref<string[]>([])
   const isUserSelect = ref(false)
-  // 矩阵
-  const matriceList = ref<number[][]>([])
   // 获取 table 元素
   const tableRef = ref()
   // columns 有子孩子处理成同一级的
   const sameLevelList = ref<TableColumnsType>([])
+  // 批量选中复制 hook
+  const {
+    bList,
+    moveCall,
+    upCall
+  } = useBatchCopy({
+    tableRef,
+    sameLevelList,
+    finallyDataSource
+  })
 
   onMounted(() => {
     // 首次是否发送请求
@@ -121,157 +125,23 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
     } else {
       initEmptyQuery.value = true
     }
-  })
 
-  // 用于批量选中复制
-  onMounted(() => {
-    // 获取元素确定唯一性
-    const tableEl = tableRef.value
+    // 鼠标移动的回调
+    moveCall(() => {
+      bgcList.value = bList.value
 
-    const mousedownCall = (e: any) => {
-      let id
-      function rId(el: any) {
-        if (el.id) {
-          id = el.id
-        } else {
-          rId(el.parentNode)
-        }
-      }
-      rId(e.target)
-      mousedownCood.value = id!
-      // 鼠标滑动事件
-      tableEl?.addEventListener('mousemove', mousemoveCall)
-    }
-
-    const mousemoveCall = (ev: any) => {
       if (cellPosition.value) {
         cellPosition.value = ''
       }
 
-      let id
-      function rId(el: any) {
-        if (el.id) {
-          id = el.id
-        } else {
-          rId(el.parentNode)
-        }
-      }
-      rId(ev.target)
-      mousemoveCood.value = id!
-
-      // 起点位置
-      const downList = mousedownCood.value?.split('$')
-      // 终点位置
-      const moveList = mousemoveCood.value?.split('$')
-
-      const downX = Number(downList[1])
-      const moveX = Number(moveList[1])
-      const downY = Number(downList[2])
-      const moveY = Number(moveList[2])
-
-      // 第二个元素是 x 坐标
-      let b
-      let f
-      if (downX > moveX) {
-        b = downX
-        f = moveX
-      } else {
-        b = moveX
-        f = downX
-      }
-      // 第三个元素是 y 坐标
-      let z
-      let x
-      if (downY > moveY) {
-        z = downY
-        x = moveY
-      } else {
-        z = moveY
-        x = downY
-      }
-
-      // 用矩阵，二维数组
-      const arr: number[][] = []
-      // 背景变色，存放的id
-      const arr1: string[] = []
-      // 保存批量选中的 key
-      const keyList: string[] = ([])
-      for (let i = f; i <= b; i++) {
-        const dataIndex = sameLevelList.value[i].dataIndex as string
-        keyList.push(dataIndex)
-
-        for (let j = x; j <= z; j++) {
-          arr.push([i, j])
-          arr1.push(`${dataIndex}$${i}$${j}`)
-        }
-      }
-      matriceList.value = arr
-      bgcList.value = arr1
-      dataIndexList.value = keyList
-
       // 批量选中大于等于 2 个
-      if (arr.length >= 2) {
+      if (bList.value.length >= 2) {
         isUserSelect.value = true
       }
-    }
-
-    // 鼠标按下时间
-    tableEl?.addEventListener('mousedown', mousedownCall)
-
-    // 鼠标弹起事件
-    tableEl?.addEventListener('mouseup', () => {
-      isUserSelect.value = false
-      tableEl.removeEventListener('mousemove', mousemoveCall)
     })
-
-    // 复制事件
-    document.addEventListener('copy', function (e) {
-      e.preventDefault()
-
-      // 批量选中大于 1 个
-      if (bgcList.value.length > 1) {
-        const textarea = document.createElement('textarea')
-        document.body.appendChild(textarea)
-
-        // 创建 table 的原因是要拿到样式一致的
-        const tableEl = document.createElement('table')
-        const tbodyEl = document.createElement('tbody')
-        // 创建文档片段，将标签全部放入该片段中，再统一插入doucment，这样只会渲染一次
-        const fragment = document.createDocumentFragment()
-
-        const start = matriceList.value[0][1]
-        const end = matriceList.value[matriceList.value.length - 1][1] + 1 // +1 因为 end 需要取到
-        const list = finallyDataSource.value.slice(start, end)
-
-        for (let i = 0; i < list.length; i++) {
-          const tr = document.createElement('tr')
-          const fragment2 = document.createDocumentFragment()
-          dataIndexList.value.forEach((key) => {
-            const td = document.createElement('td')
-            td.innerText = key === "序号" ? i + 1 : list[i][key]
-            fragment2.appendChild(td)
-          })
-          tr.appendChild(fragment2)
-          fragment.appendChild(tr)
-        }
-
-        tbodyEl.appendChild(fragment)
-        tableEl.appendChild(tbodyEl)
-        document.body.appendChild(tableEl)
-        tableEl.id = "copy_table"
-
-        const table = document.querySelector('#copy_table') as any
-        textarea.value = table.innerText
-
-        // selection 是当前选中的内容
-        // 给选中的内容添加多余的内容
-        e.clipboardData!.setData('text', textarea.value)
-
-        document.body.removeChild(textarea)
-        document.body.removeChild(tableEl)
-      } else {
-        e.clipboardData!.setData('text', window.getSelection()?.toString() || "")
-      }
+    // 鼠标弹起的回调
+    upCall(() => {
+      isUserSelect.value = false
     })
   })
 
