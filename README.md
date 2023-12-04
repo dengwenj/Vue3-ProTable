@@ -4,6 +4,11 @@
 ```
 npm install vue3-procomponents
 ```
-### 支持 jsx、vue 文件
-
-### 文档 -> src/components/types.d.ts
+#### 1、支持书写 jsx、vue 文件
+#### 2、支持表单搜索
+#### 3、支持虚列列表
+#### 4、支持批量选中复制
+#### 5、支持模糊搜索
+#### 6、支持列设置
+#### 更多请看文档和网站
+#### 文档 -> src/components/types.d.ts
