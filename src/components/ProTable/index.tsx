@@ -99,6 +99,8 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   const matriceList = ref<number[][]>([])
   // 获取 table 元素
   const tableRef = ref()
+  // columns 有子孩子处理成同一级的
+  const sameLevelList = ref<TableColumnsType>([])
 
   onMounted(() => {
     // 首次是否发送请求
@@ -123,8 +125,8 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
 
   // 用于批量选中复制
   onMounted(() => {
-    // TODO 1、获取元素确定唯一性，2、有 children 会出错
-    const tableEl = document.querySelector('.ant-table-container')
+    // 获取元素确定唯一性
+    const tableEl = tableRef.value
 
     const mousedownCall = (e: any) => {
       let id
@@ -195,7 +197,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
       // 保存批量选中的 key
       const keyList: string[] = ([])
       for (let i = f; i <= b; i++) {
-        const dataIndex = notHideInTableColumns.value[i].dataIndex
+        const dataIndex = sameLevelList.value[i].dataIndex as string
         keyList.push(dataIndex)
 
         for (let j = x; j <= z; j++) {
@@ -315,6 +317,20 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
       })
     }
 
+    // 如果有子孩子，递归处理成同一级的
+    const sameLevel: any[] = []
+    function rSameLevel(columns: TableColumnsType) {
+      for (const item of columns) {
+        if (item.children?.length) {
+          rSameLevel(item.children)
+        } else {
+          sameLevel.push(item)
+        }
+      }
+    }
+    rSameLevel(notHideInTableColumns.value)
+    sameLevelList.value = sameLevel
+
     let checkboxColumns: any[] = [];
     (notHideInTableColumns.value as TableColumnsType).forEach((item, index) => {
       // 自定义的 body 没有选项，自己加
@@ -420,10 +436,20 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
         }
       }
 
-      // 做个标识在哪个位置
-      if (!item.idx) {
-        item.idx = index
+      /**
+       * 递归添加索引做个标识在哪个位置，有子孩子
+       */
+      function rIdx(columnsItem: TQColumnType, index: number) {
+        const { children } = columnsItem
+        if (children?.length) {
+          for (let i = 0; i < children.length; i++) {
+            rIdx(children[i], i + index)
+          }
+        } else {
+          columnsItem.idx = index
+        }
       }
+      rIdx(item, index)
 
       // title 是否为 字符串
       if (typeof item.title === 'function') {
@@ -446,8 +472,6 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
        * 递归添加单元格点击事件
        */
       function rCell(columnsItem: TQColumnType) {
-        // console.log(columnsItem, 'wwwkwk');
-
         if (columnsItem.children?.length) {
           for (const cItex of columnsItem.children) {
             rCell(cItex)

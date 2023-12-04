@@ -19,6 +19,9 @@ interface DataItem {
   tag: number
   amount: number
   time: string
+  hh: string
+  xx: string
+  ww: string
 }
 
 export default defineComponent(function AdvancedTable() {
@@ -95,6 +98,25 @@ export default defineComponent(function AdvancedTable() {
       hideInSearch: true
     },
     {
+      title: "多级",
+      dataIndex: "dj",
+      hideInSearch: true,
+      children: [
+        {
+          title: "哈哈",
+          dataIndex: "hh"
+        },
+        {
+          title: "嘻嘻",
+          dataIndex: "xx"
+        },
+        {
+          title: "微微",
+          dataIndex: "ww"
+        }
+      ]
+    },
+    {
       title: '操作',
       dataIndex: '',
       width: 120,
@@ -160,7 +182,10 @@ export default defineComponent(function AdvancedTable() {
               opera: `京剧${i}`,
               tag: i % 2 === 0 ? 1 : 0,
               amount: i + 2023,
-              time: '2023-11-02'
+              time: '2023-11-02',
+              hh: "哈哈",
+              xx: "嘻嘻",
+              ww: "微微"
             })
           }
 
