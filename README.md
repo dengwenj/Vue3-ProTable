@@ -11,4 +11,4 @@ npm install vue3-procomponents
 #### 5、支持模糊搜索
 #### 6、支持列设置
 #### 更多请看文档和网站
-#### 文档 -> src/components/types.d.ts
+#### 文档 -> src/components/ProTable/types.d.ts
