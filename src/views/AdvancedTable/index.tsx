@@ -22,6 +22,8 @@ interface DataItem {
   hh: string
   xx: string
   ww: string
+  多级1Pro: string
+  多级2Pro: string
 }
 
 export default defineComponent(function AdvancedTable() {
@@ -117,6 +119,21 @@ export default defineComponent(function AdvancedTable() {
       ]
     },
     {
+      title: "多级Pro",
+      dataIndex: "多级Pro",
+      hideInSearch: true,
+      children: [
+        {
+          title: "多级1Pro",
+          dataIndex: "多级1Pro"
+        },
+        {
+          title: "多级2Pro",
+          dataIndex: "多级2Pro"
+        },
+      ]
+    },
+    {
       title: '操作',
       dataIndex: '',
       width: 120,
@@ -185,7 +202,9 @@ export default defineComponent(function AdvancedTable() {
               time: '2023-11-02',
               hh: "哈哈",
               xx: "嘻嘻",
-              ww: "微微"
+              ww: "微微",
+              多级1Pro: "多级1Pro",
+              多级2Pro: "多级2Pro"
             })
           }
 

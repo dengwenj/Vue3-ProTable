@@ -309,17 +309,20 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
       /**
        * 递归添加索引做个标识在哪个位置，有子孩子
        */
-      function rIdx(columnsItem: TQColumnType, index: number) {
+      function rIdx(columnsItem: TQColumnType) {
+        // 找到当前这个拿到索引
+        const findIdx = sameLevel.findIndex((itex) => itex.dataIndex === columnsItem.dataIndex)
+
         const { children } = columnsItem
         if (children?.length) {
           for (let i = 0; i < children.length; i++) {
-            rIdx(children[i], i + index)
+            rIdx(children[i])
           }
         } else {
-          columnsItem.idx = index
+          columnsItem.idx = findIdx
         }
       }
-      rIdx(item, index)
+      rIdx(item)
 
       // title 是否为 字符串
       if (typeof item.title === 'function') {

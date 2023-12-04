@@ -87,7 +87,7 @@ export default defineComponent(function VirtualTable() {
         virtualSort: {
           isFieldDate: true
         },
-        width: 160,
+        width: 170,
         hideInSearch: true
       },
       {
@@ -114,6 +114,40 @@ export default defineComponent(function VirtualTable() {
             rowSpan
           }
         }
+      },
+      {
+        title: '多级',
+        dataIndex: 'dj',
+        hideInSearch: true,
+        children: [
+          {
+            title: '多级1',
+            dataIndex: '多级1',
+            width: 100
+          },
+          {
+            title: '多级2',
+            dataIndex: '多级2',
+            width: 100
+          },
+        ]
+      },
+      {
+        title: '多级pro',
+        dataIndex: 'djpro',
+        hideInSearch: true,
+        children: [
+          {
+            title: '多级1pro',
+            dataIndex: '多级1pro',
+            width: 100
+          },
+          {
+            title: '多级2pro',
+            dataIndex: '多级2pro',
+            width: 100
+          },
+        ]
       },
       {
         title: '操作',
@@ -193,7 +227,11 @@ export default defineComponent(function VirtualTable() {
                 date: new Date().getTime() + i * 1000,
                 rowSpan: '我来把相同的价格合并下',
                 phone: `1311234567${i}`,
-                address: '上海市浦东新区'
+                address: '上海市浦东新区',
+                多级1pro: '多级1pro',
+                多级2pro: '多级2pro',
+                多级1: "多级1",
+                多级2: '多级2'
               })
             }
             resolve(arr)
