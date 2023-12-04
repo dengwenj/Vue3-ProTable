@@ -153,6 +153,7 @@ export default defineComponent(function VirtualTable() {
         title: '操作',
         dataIndex: '',
         width: 120,
+        fixed: 'right',
         customRender(opt) {
           return (
             <Space>
