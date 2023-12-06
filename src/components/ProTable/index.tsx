@@ -103,7 +103,8 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   } = useBatchCopy({
     tableRef,
     sameLevelList,
-    finallyDataSource
+    finallyDataSource,
+    rowKey: typeof attrs.rowKey === 'string' ? attrs.rowKey : 'id'
   })
 
   onMounted(() => {
@@ -366,9 +367,15 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
               backgroundColor: ThemeColor
             } : {}
 
-            const bgc2 = bgcList.value.includes(`${column?.dataIndex}$${(column as any).idx}$${rowIndx}`) ? {
-              backgroundColor: ThemeColor
-            } : {}
+            const id = `${column?.dataIndex}$${(column as any).idx}$${rowIndx}`
+            const bgc2 = bgcList.value.includes(id) ? { backgroundColor: ThemeColor } : {}
+
+            // 数据有 children 加上 data-id 属性, 做个标识
+            let dataIdProps: Record<string, any> = {}
+            if ('children' in finallyDataSource.value[0]) {
+              const key = typeof attrs.rowKey === 'string' ? attrs.rowKey : 'id'
+              dataIdProps[`data-${key}`] = record[key]
+            }
 
             return {
               onClick(e) {
@@ -385,7 +392,8 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
                 ...bgc2,
                 ...style
               },
-              id: `${column?.dataIndex}$${(column as any).idx}$${rowIndx}`,
+              id,
+              ...dataIdProps,
               // 外层写的 customCell 返回的属性值
               ...props
             }

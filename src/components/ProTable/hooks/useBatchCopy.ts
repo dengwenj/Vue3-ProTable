@@ -9,12 +9,17 @@ interface BatchCopyProps {
   tableRef: Ref<Element>
   sameLevelList: Ref<Record<string, any>[]>
   finallyDataSource: Ref<Record<string, any>[]>
+  rowKey: string
 }
+
+// 返回的数据, 递归的字段
+const rField = 'children'
 
 export default function useBatchCopy({ 
   tableRef,
   sameLevelList, 
-  finallyDataSource
+  finallyDataSource,
+  rowKey: rK
 }: BatchCopyProps): {
   bList: Ref<string[]>
   moveCall: (call: () => void) => void
@@ -157,28 +162,51 @@ export default function useBatchCopy({
         // 创建文档片段，将标签全部放入该片段中，再统一插入doucment，这样只会渲染一次
         const fragment = document.createDocumentFragment()
 
-        const start = matriceList.value[0][1]
-        const end = matriceList.value[matriceList.value.length - 1][1] + 1 // +1 因为 end 需要取到
+        let list = finallyDataSource.value
+        // 判断 finallyDataSource 有没 children, 表格展开时用到
+        if (rField in list[0]) {
+          // 去除多余的
+          const formatBGCList: string[] = []
+          for (let i = 0; i < bgcList.value.length; i++) {
+            const item = bgcList.value[i]
+            const formatItem = item.split('$')
 
-        let data = finallyDataSource.value
-        // 判断 finallyDataSource 有没 children, 递归处理成同一级的
-        if ('children' in data[0]) {
-          const dataList: Record<string, any>[] = []
-          function rData(data: Record<string, any>[]) {
-            for (const item of data) {
-              if (item.children?.length) {
-                dataList.push(item)
-                rData(item.children)
-              } else {
-                dataList.push(item)
+            if (formatBGCList.length === 0) {
+              formatBGCList.push(item)
+            } else {
+              // 和第一个进行比较
+              if (formatItem[0] === formatBGCList[0].split('$')[0]) {
+                formatBGCList.push(item)
               }
             }
           }
-          rData(data)
-          data = dataList
+
+          // 通过 id 去获取元素，拿到 data-rowkey 的值
+          const rowKeyList: string[] = []
+          for (const item of formatBGCList) {
+            const el = document.getElementById(item)
+            const rowKey = el?.getAttribute(`data-${rK}`) as string
+            rowKeyList.push(rowKey)
+          }
+
+          const dataList: Record<string, any>[] = []
+          function rData(data: Record<string, any>[]) {
+            for (const item of data) {
+              rowKeyList.includes(item[rK]) && dataList.push(item)
+
+              if (item[rField]?.length) {
+                rData(item[rField])
+              }
+            }
+          }
+          rData(list)
+          list = dataList
+        } else {
+          const start = matriceList.value[0][1]
+          const end = matriceList.value[matriceList.value.length - 1][1] + 1 // +1 因为 end 需要取到
+          list = list.slice(start, end)
         }
 
-        const list = data.slice(start, end)
         for (let i = 0; i < list.length; i++) {
           const tr = document.createElement('tr')
           const fragment2 = document.createDocumentFragment()
