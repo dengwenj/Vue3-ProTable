@@ -12,7 +12,7 @@ interface BatchCopyProps {
 }
 
 export default function useBatchCopy({ 
-  tableRef, 
+  tableRef,
   sameLevelList, 
   finallyDataSource
 }: BatchCopyProps): {
@@ -159,8 +159,26 @@ export default function useBatchCopy({
 
         const start = matriceList.value[0][1]
         const end = matriceList.value[matriceList.value.length - 1][1] + 1 // +1 因为 end 需要取到
-        const list = finallyDataSource.value.slice(start, end)
 
+        let data = finallyDataSource.value
+        // 判断 finallyDataSource 有没 children, 递归处理成同一级的
+        if ('children' in data[0]) {
+          const dataList: Record<string, any>[] = []
+          function rData(data: Record<string, any>[]) {
+            for (const item of data) {
+              if (item.children?.length) {
+                dataList.push(item)
+                rData(item.children)
+              } else {
+                dataList.push(item)
+              }
+            }
+          }
+          rData(data)
+          data = dataList
+        }
+
+        const list = data.slice(start, end)
         for (let i = 0; i < list.length; i++) {
           const tr = document.createElement('tr')
           const fragment2 = document.createDocumentFragment()
