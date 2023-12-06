@@ -1,9 +1,9 @@
 # ProTable，用于快速开发
 
-### 安装
+<!-- ### 安装
 ```
 npm install vue3-procomponents
-```
+``` -->
 #### 1、支持书写 jsx、vue 文件
 #### 2、支持表单搜索
 #### 3、支持虚拟列表
