@@ -164,7 +164,7 @@ export default function useBatchCopy({
 
         let list = finallyDataSource.value
         // 判断 finallyDataSource 有没 children, 表格展开时用到
-        if (rField in list[0]) {
+        if (rField in list?.[0]) {
           // 去除多余的
           const formatBGCList: string[] = []
           for (let i = 0; i < bgcList.value.length; i++) {

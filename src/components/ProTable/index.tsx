@@ -375,7 +375,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
 
             // 数据有 children 加上 data-id 属性, 做个标识
             let dataIdProps: Record<string, any> = {}
-            if ('children' in finallyDataSource.value[0]) {
+            if ('children' in finallyDataSource.value?.[0]) {
               const key = typeof attrs.rowKey === 'string' ? attrs.rowKey : 'id'
               dataIdProps[`data-${key}`] = record[key]
             }
