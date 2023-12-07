@@ -18,6 +18,7 @@ import TQProForm from "../ProForm"
 import Copyable from "./components/Copyable"
 import VirtualList from "./components/VirtualList"
 import ColumnSetting from "./components/ColumnSetting"
+import RightClickMenu from "./components/RightClickMenu"
 import useTableHeight from "./hooks/useTableHight"
 import useBatchCopy from "./hooks/useBatchCopy"
 import { formatNumber, stringDateFormat } from "./utils"
@@ -106,6 +107,8 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
     finallyDataSource,
     rowKey: typeof attrs.rowKey === 'string' ? attrs.rowKey : 'id'
   })
+  // 是否显示右键菜单
+  const isShowRightClickMenu = ref(false)
 
   onMounted(() => {
     // 首次是否发送请求
@@ -924,6 +927,10 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
                 style: {
                   height: `${rowHeight.value}px`,
                   backgroundColor: index! % 2 === 0 ? '#fafafa' : '#fff'
+                },
+                onContextmenu(e) {
+                  e.preventDefault()
+                  isShowRightClickMenu.value = true
                 }
               }
             }}
@@ -1027,6 +1034,11 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
             }}
           </Table>
         </div>
+
+        {/* 右键菜单 */}
+        {isShowRightClickMenu.value && (
+          <RightClickMenu />
+        )}
       </div>
     )
   }
