@@ -255,15 +255,24 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
       }
 
       // 数字靠右保留两位小数
-      if (!item.customRender && item.valueIsNumber) {
-        item.customRender = (opt) => {
-          return (
-            <div style={{ textAlign: 'right', width: '100%' }}>
-              {opt.text && formatNumber(opt.text, 2)}
-            </div>
-          )
+      function rValueIsNumber(columnsItem: TQColumnType) {
+        if (columnsItem.children?.length) {
+          for (const itez of columnsItem.children) {
+            rValueIsNumber(itez)
+          }
+        } else {
+          if (!columnsItem.customRender && columnsItem.valueIsNumber) {
+            columnsItem.customRender = (opt) => {
+              return (
+                <div style={{ textAlign: 'right', width: '100%' }}>
+                  {opt.text && formatNumber(opt.text, 2)}
+                </div>
+              )
+            }
+          }
         }
       }
+      rValueIsNumber(item)
 
       item.resizable = true
       // 给自定义筛选数据加上初始值
@@ -306,7 +315,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
 
         // 是否有复制
         if (item.copy && !item.ellipsis) {
-          item.customRender = (opt) => <div>{opt.text}{<Copyable opt={opt} />}</div>
+          item.customRender = (opt) => <div>{opt.text}{opt.text && <Copyable opt={opt} />}</div>
         }
       }
 
