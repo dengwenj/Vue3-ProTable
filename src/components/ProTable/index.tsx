@@ -402,9 +402,9 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
                 cellPosition.value = `${column?.dataIndex}${rowIndx}`
               },
               style: {
+                ...style,
                 ...bgc,
-                ...bgc2,
-                ...style
+                ...bgc2
               },
               id,
               ...dataIdProps,
