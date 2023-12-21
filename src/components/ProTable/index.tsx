@@ -9,8 +9,17 @@ import {
   onMounted,
   ref,
   watch,
+  provide,
 } from "vue"
-import { Table, Tooltip, type TablePaginationConfig, Checkbox, Space, Empty, InputSearch } from "ant-design-vue"
+import {
+  Table,
+  Tooltip,
+  type TablePaginationConfig,
+  Checkbox,
+  Space,
+  Empty,
+  InputSearch
+} from "ant-design-vue"
 import { ReloadOutlined, CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons-vue'
 
 import FilterDropdown from "./components/filterDropdown"
@@ -25,10 +34,18 @@ import { formatNumber, stringDateFormat } from "./utils"
 import { SortOrder, ThemeColor } from "./conf"
 import './index.less'
 
-import type { TQProTableProps, TableColumnsType, TableEmit, FilterDropdownProps, TQColumnType } from './types'
+import type {
+  TQProTableProps,
+  TableColumnsType,
+  TableEmit,
+  FilterDropdownProps,
+  TQColumnType,
+  DataInfo
+} from './types'
 import type { TableCurrentDataSource } from "ant-design-vue/es/table/interface"
 import type { FormInstance } from "../ProForm/types"
 import type { Opt, TQSetupContext } from "./types"
+import type { RightClickMenuInstance } from "./components/RightClickMenu"
 
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE
 
@@ -109,6 +126,20 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   })
   // 是否显示右键菜单
   const isShowRightClickMenu = ref(false)
+  // 右键点击的哪行
+  const rightRowIdx = ref<number>(0)
+  // 点击row右键的事件e
+  const rightRowEv = ref<MouseEvent>()
+  // 右键菜单组件 Ref
+  const rightClickMenuRef = ref<RightClickMenuInstance>()
+  // 右键点击的行内容
+  const rightRecord = ref<Record<string, any>>({})
+
+  provide<DataInfo>('dataInfo', {
+    notHideInTableColumns,
+    rightRecord,
+    rightRowIdx
+  })
 
   onMounted(() => {
     // 首次是否发送请求
@@ -872,6 +903,63 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   }
 
   /**
+   * 表格的 title
+   */
+  const title = () => {
+    return (
+      <div class='title'>
+        <div>{slots.title?.()}</div>
+
+        <div class='tool'>
+          {/* 可搜索 */}
+          {
+            (attrs.isVirtual && isSearch) && (
+              <div class='search-all'>
+                <InputSearch
+                  value={searchAll.value}
+                  placeholder='可搜索数据'
+                  style={{ width: '180px' }}
+                  allowClear
+                  onSearch={(val) => handleSearchAllData(val)}
+                  onChange={(val) => searchAll.value = val.target.value!}
+                />
+              </div>
+            )
+          }
+
+          {/* 表格工具栏 */}
+          <div class='tool-bar'>
+            <Space>{attrs.toolBarRender?.()}</Space>
+          </div>
+
+          {/* 刷新 */}
+          {
+            attrs.search !== false && attrs.request && (
+              <div class='reload'>
+                <Tooltip title='刷新'>
+                  <ReloadOutlined onClick={() => reload()} />
+                </Tooltip>
+              </div>
+            )
+          }
+
+          {/* 列设置 */}
+          {attrs.isShowColumnSetting !== false && (
+            <div>
+              <ColumnSetting
+                notHideInTableColumns={notHideInTableColumns.value}
+                onChangeColumns={(columns) => {
+                  notHideInTableColumns.value = columns
+                }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  /**
    * 暴露出去父组件可以用到
    */
   expose({
@@ -938,11 +1026,19 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
                 return {
                   style: {
                     height: `${rowHeight.value}px`,
-                    backgroundColor: index! % 2 === 0 ? '#fafafa' : '#fff'
+                    backgroundColor: rightClickMenuRef.value?.isShow && rightRowIdx.value === index
+                      ? ThemeColor
+                      : index! % 2 === 0 ? '#fafafa' : '#fff',
                   },
+                  // 行点击右键
                   onContextmenu(e) {
                     e.preventDefault()
+
+                    rightRowEv.value = e
+                    rightRowIdx.value = index!
+                    rightRecord.value = record
                     isShowRightClickMenu.value = true
+                    nextTick(() => rightClickMenuRef.value?.open())
                   }
                 }
               }}
@@ -954,7 +1050,12 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
                 showTotal: (total: number) => <div>共 {total} 条</div>
               }}
               locale={{
-                emptyText: <Empty image={simpleImage} description={initEmptyQuery.value ? '请手动点击查询' : '暂无数据'} />
+                emptyText: (
+                  <Empty
+                    image={simpleImage}
+                    description={initEmptyQuery.value ? '请手动点击查询' : '暂无数据'}
+                  />
+                )
               }}
               onResizeColumn={(width, row) => row.width = width}
               onChange={typeof onChange === 'function' ? onChange : handleChange}
@@ -981,75 +1082,22 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
                 customFilterDropdown: (info: FilterDropdownProps) => {
                   return (
                     <div>
-                      {
-                        isFilterDropDownMount.value && (
-                          <FilterDropdown {...info} />
-                        )
-                      }
+                      {isFilterDropDownMount.value && <FilterDropdown {...info} />}
                     </div>
                   )
                 },
                 ...slots,
-                title: () => {
-                  return (
-                    <div class='title'>
-                      <div>{slots.title?.()}</div>
-
-                      <div class='tool'>
-                        {/* 可搜索 */}
-                        {
-                          (attrs.isVirtual && isSearch) && (
-                            <div class='search-all'>
-                              <InputSearch
-                                value={searchAll.value}
-                                placeholder='可搜索数据'
-                                style={{ width: '180px' }}
-                                allowClear
-                                onSearch={(val) => handleSearchAllData(val)}
-                                onChange={(val) => searchAll.value = val.target.value!}
-                              />
-                            </div>
-                          )
-                        }
-
-                        {/* 表格工具栏 */}
-                        <div class='tool-bar'>
-                          <Space>{attrs.toolBarRender?.()}</Space>
-                        </div>
-
-                        {/* 刷新 */}
-                        {
-                          attrs.search !== false && attrs.request && (
-                            <div class='reload'>
-                              <Tooltip title='刷新'>
-                                <ReloadOutlined onClick={() => reload()} />
-                              </Tooltip>
-                            </div>
-                          )
-                        }
-
-                        {/* 列设置 */}
-                        {attrs.isShowColumnSetting !== false && (
-                          <div>
-                            <ColumnSetting
-                              notHideInTableColumns={notHideInTableColumns.value}
-                              onChangeColumns={(columns) => {
-                                notHideInTableColumns.value = columns
-                              }}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )
-                },
+                title,
               }}
             </Table>
           </div>
 
           {/* 右键菜单 */}
           {isShowRightClickMenu.value && (
-            <RightClickMenu />
+            <RightClickMenu
+              ref={rightClickMenuRef}
+              rightRowEv={rightRowEv.value}
+            />
           )}
         </div>
       </>

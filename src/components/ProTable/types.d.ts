@@ -30,7 +30,8 @@ import type {
   SlotsType,
   Slot,
   ObjectEmitsOptions,
-  Slots 
+  Slots, 
+  Ref
 } from "vue"
 
 // 要显示什么样的组件
@@ -266,3 +267,10 @@ export type TQSetupContext<A = any, E = EmitsOptions, S extends SlotsType = {}> 
   emit: EmitFn<E>;
   expose: (exposed?: Record<string, any>) => void;
 } : never;
+
+// table provide 传递的内容
+export interface DataInfo {
+  notHideInTableColumns: Ref<TableColumnsType>
+  rightRecord: Ref<Record<string, any>>
+  rightRowIdx: Ref<number>
+}
