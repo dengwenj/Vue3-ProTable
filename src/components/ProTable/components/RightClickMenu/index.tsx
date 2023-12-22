@@ -118,7 +118,7 @@ export default defineComponent<RightClickMenuProps>(function RightClickMenu(_, {
       <div
         class='right-click-menu'
         style={{
-          position: 'absolute',
+          position: 'fixed',
           left: `${attrs.rightRowEv?.clientX || 0}px`,
           top: `${attrs.rightRowEv?.clientY || 0}px`,
           display: isShow.value ? 'block' : 'none'

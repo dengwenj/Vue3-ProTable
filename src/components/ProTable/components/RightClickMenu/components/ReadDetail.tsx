@@ -39,7 +39,7 @@ export default defineComponent(function ReadDetail(_, {
         if (item.children?.length) {
           rColumns(item.children)
         } else {
-          if (item.title !== '操作') {
+          if (item.title !== '操作' && item.label !== '多选项') {
             cs.push(item)
           }
         }
@@ -57,7 +57,7 @@ export default defineComponent(function ReadDetail(_, {
         {cs.map((item) => {
           const value = dataInfo.rightRecord.value[item.dataIndex as string]
           return (
-            <Descriptions.Item label={item.title}>
+            <Descriptions.Item label={typeof item.title === 'string' ? item.title : item.originTitle}>
               {item.customRender ? item.customRender({
                 value,
                 text: value,

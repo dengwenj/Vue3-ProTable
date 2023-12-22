@@ -960,6 +960,34 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   }
 
   /**
+   * 表格行 row 属性
+   */
+  const customRow = (record: Record<string, any>, index: number | undefined) => {
+    // 外部写的 row 操作
+    const props = attrs.customRow?.(record, index)
+
+    return {
+      style: {
+        height: `${rowHeight.value}px`,
+        backgroundColor: rightClickMenuRef.value?.isShow && rightRowIdx.value === index
+          ? ThemeColor
+          : index! % 2 === 0 ? '#fafafa' : '#fff',
+      },
+      // 行点击右键
+      onContextmenu(e: MouseEvent) {
+        e.preventDefault()
+
+        rightRowEv.value = e
+        rightRowIdx.value = index!
+        rightRecord.value = record
+        isShowRightClickMenu.value = true
+        nextTick(() => rightClickMenuRef.value?.open())
+      },
+      ...props
+    }
+  }
+
+  /**
    * 暴露出去父组件可以用到
    */
   expose({
@@ -1015,33 +1043,13 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
                         heightY={attrs.scroll?.y as number || heightY.value}
                         selectedRowKeys={selectedRowKeys.value}
                         initEmptyQuery={initEmptyQuery.value}
-                        customRow={attrs.customRow}
+                        customRow={customRow}
                       />
                     )
                   }
                 }
               } : {})}
               dataSource={finallyDataSource.value}
-              customRow={(record, index) => {
-                return {
-                  style: {
-                    height: `${rowHeight.value}px`,
-                    backgroundColor: rightClickMenuRef.value?.isShow && rightRowIdx.value === index
-                      ? ThemeColor
-                      : index! % 2 === 0 ? '#fafafa' : '#fff',
-                  },
-                  // 行点击右键
-                  onContextmenu(e) {
-                    e.preventDefault()
-
-                    rightRowEv.value = e
-                    rightRowIdx.value = index!
-                    rightRecord.value = record
-                    isShowRightClickMenu.value = true
-                    nextTick(() => rightClickMenuRef.value?.open())
-                  }
-                }
-              }}
               pagination={isVirtual ? false : {
                 total: total.value,
                 current: current.value,
@@ -1076,6 +1084,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
                   )
                 }
               } : {})}
+              customRow={customRow}
             >
               {/* 自定义筛选插槽 */}
               {{
