@@ -210,7 +210,7 @@ export default defineComponent(function AdvancedTable() {
 
           setTimeout(() => {
             resolve(data)
-          }, 1000)
+          }, 200)
         })
 
         return {

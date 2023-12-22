@@ -13,7 +13,7 @@ import type { TQProTableInstance, TableColumnsType } from "@/components/ProTable
 
 export default defineComponent(function VirtualTable() {
   const seleRowKey = ref<any[]>([])
-  const total = ref(1000)
+  const total = ref(10000)
   const proTableRef = ref<TQProTableInstance>()
 
   const columns = computed<TableColumnsType>(() => {
@@ -236,7 +236,7 @@ export default defineComponent(function VirtualTable() {
               })
             }
             resolve(arr)
-          }, 1000)
+          }, 200)
         })
         return {
           data
