@@ -148,7 +148,16 @@ export default defineComponent<RightClickMenuProps>(function RightClickMenu(_, {
       </div>
 
       {/* 查看详情 */}
-      {isShowReadDetail.value && <ReadDetail ref={readDetailRef} />}
+      {isShowReadDetail.value && (
+        <ReadDetail
+          ref={readDetailRef}
+          onReadDetail={() => {
+            setTimeout(() => {
+              isShowReadDetail.value = false
+            }, 500)
+          }}
+        />
+      )}
     </>
   )
 })

@@ -8,8 +8,9 @@ import { Drawer, Descriptions } from 'ant-design-vue'
 
 import type { DataInfo, TableColumnsType } from "@/components/ProTable/types"
 
-export default defineComponent(function ReadDetail(_, {
-  expose
+export default defineComponent<{ onReadDetail: () => void }>(function ReadDetail(_, {
+  expose,
+  emit
 }) {
   const dataInfo = inject('dataInfo') as DataInfo
 
@@ -29,6 +30,7 @@ export default defineComponent(function ReadDetail(_, {
    */
   const handleClose = () => {
     isOpen.value = false
+    emit('readDetail')
   }
 
   const dom = () => {
