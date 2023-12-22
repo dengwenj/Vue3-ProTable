@@ -13,6 +13,6 @@ npm install vue3-procomponents
 #### 4、支持批量选中复制
 #### 5、支持模糊搜索
 #### 6、支持列设置
+#### 7、右键菜单功能
 #### 更多请看文档和网站
 #### 文档 -> src/components/ProTable/types.d.ts
-#### 右键菜单功能开发中
