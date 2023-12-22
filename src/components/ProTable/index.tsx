@@ -966,13 +966,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
     // 外部写的 row 操作
     const props = attrs.customRow?.(record, index)
 
-    return {
-      style: {
-        height: `${rowHeight.value}px`,
-        backgroundColor: rightClickMenuRef.value?.isShow && rightRowIdx.value === index
-          ? ThemeColor
-          : index! % 2 === 0 ? '#fafafa' : '#fff',
-      },
+    const rightMenu = attrs.isRightMenu !== false ? {
       // 行点击右键
       onContextmenu(e: MouseEvent) {
         e.preventDefault()
@@ -983,6 +977,16 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
         isShowRightClickMenu.value = true
         nextTick(() => rightClickMenuRef.value?.open())
       },
+    } : {}
+
+    return {
+      style: {
+        height: `${rowHeight.value}px`,
+        backgroundColor: rightClickMenuRef.value?.isShow && rightRowIdx.value === index
+          ? ThemeColor
+          : index! % 2 === 0 ? '#fafafa' : '#fff',
+      },
+      ...rightMenu,
       ...props
     }
   }

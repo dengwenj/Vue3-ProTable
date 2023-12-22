@@ -213,6 +213,8 @@ export interface TQProTableProps<T = any> extends TableProps<T> {
   cellBGC?: boolean
   // 默认是否有 scroll, 虚拟表格默认为 true，分页默认为 false
   defaultScroll?: boolean
+  // 是否右键菜单
+  isRightMenu?: boolean
 }
 
 export interface TableEmit {
