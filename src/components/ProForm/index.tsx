@@ -35,13 +35,13 @@ import { ThemeColor } from '../ProTable/conf'
 import './style.less'
 
 import type { ProFormProps, FormEmit } from './types'
-import type { TQColumnType, ValueType, TQSetupContext } from '../ProTable/types'
+import type { PMColumnType, ValueType, PMSetupContext } from '../ProTable/types'
 
 export default defineComponent<ProFormProps>(function ProForm(_, {
   attrs,
   expose,
   emit
-}: TQSetupContext<ProFormProps, FormEmit>) {
+}: PMSetupContext<ProFormProps, FormEmit>) {
   const {
     search,
     isShowToolRender
@@ -89,7 +89,7 @@ export default defineComponent<ProFormProps>(function ProForm(_, {
    * @param item 每一个 
    * @returns JSX.Element
    */
-  const formComponentRender = (item: TQColumnType) => {
+  const formComponentRender = (item: PMColumnType) => {
     const {
       valueType = 'input',
       options = [],

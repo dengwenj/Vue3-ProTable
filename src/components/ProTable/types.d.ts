@@ -141,7 +141,7 @@ interface Options {
   children?: VL[]
 }
 
-export type TQColumnType<T = any> = {
+export type PMColumnType<T = any> = {
   valueType?: ValueType
   // 日期分开选择的字段
   doubleFieldList?: [string, string]
@@ -174,10 +174,10 @@ export type TQColumnType<T = any> = {
   isCustomRenderStyle?: boolean
 } & Pick<ColumnType<T>, keyof ColumnType>
 // columns 的属性
-export type TableColumnsType<T = any> = TQColumnType<T>[]
+export type TableColumnsType<T = any> = PMColumnType<T>[]
 
 // ProTable 的属性
-export interface TQProTableProps<T = any> extends TableProps<T> {
+export interface PMProTableProps<T = any> extends TableProps<T> {
   isInitRequest?: boolean
   request?: RequestParams,
   columns?: TableColumnsType<T>
@@ -223,7 +223,7 @@ export interface TableEmit {
   filterListChange: (filterList: Record<string, any>[]) => void
 }
  
-export interface TQProTableInstance {
+export interface PMProTableInstance {
   // 重新发送请求
   reload: () => void
   // 可以获取到查询表单的 form 实例，用于一些灵活的配置
@@ -239,7 +239,7 @@ interface FilterDropdownProps {
   clearFilters?: (...arg: any[]) => void;
   filters?: ColumnFilterItem[];
   visible?: boolean;
-  column?: TQColumnType;
+  column?: PMColumnType;
 }
 
 export interface Opt<T = any> {
@@ -263,7 +263,7 @@ type UnwrapSlotsType<S extends SlotsType, T = NonNullable<S[typeof SlotSymbol]>>
 type EmitFn<Options = ObjectEmitsOptions, Event extends keyof Options = keyof Options> = Options extends Array<infer V> ? (event: V, ...args: any[]) => void : {} extends Options ? (event: string, ...args: any[]) => void : UnionToIntersection<{
   [key in Event]: Options[key] extends (...args: infer Args) => any ? (event: key, ...args: Args) => void : (event: key, ...args: any[]) => void;
 }[Event]>;
-export type TQSetupContext<A = any, E = EmitsOptions, S extends SlotsType = {}> = E extends any ? {
+export type PMSetupContext<A = any, E = EmitsOptions, S extends SlotsType = {}> = E extends any ? {
   attrs: A;
   slots: UnwrapSlotsType<S>;
   emit: EmitFn<E>;

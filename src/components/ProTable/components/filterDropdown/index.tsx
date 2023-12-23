@@ -9,13 +9,13 @@ import { SearchOutlined } from '@ant-design/icons-vue'
 
 import './index.less'
 
-import type { FilterDropdownProps, TQSetupContext } from "../../types"
+import type { FilterDropdownProps, PMSetupContext } from "../../types"
 import type { ChangeEvent } from "ant-design-vue/es/_util/EventInterface"
 import type { CheckboxValueType } from "ant-design-vue/es/checkbox/interface"
 
 export default defineComponent<FilterDropdownProps>(function FilterDropdown(_, {
   attrs,
-}: TQSetupContext<FilterDropdownProps>) {
+}: PMSetupContext<FilterDropdownProps>) {
   const filterData = ref(attrs.column!.customFilters! || [])
   const checkAllState = reactive({
     indeterminate: false,

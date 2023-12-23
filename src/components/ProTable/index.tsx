@@ -23,7 +23,7 @@ import {
 import { ReloadOutlined, CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons-vue'
 
 import FilterDropdown from "./components/filterDropdown"
-import TQProForm from "../ProForm"
+import PMProForm from "../ProForm"
 import Copyable from "./components/Copyable"
 import VirtualList from "./components/VirtualList"
 import ColumnSetting from "./components/ColumnSetting"
@@ -35,26 +35,26 @@ import { SortOrder, ThemeColor } from "./conf"
 import './index.less'
 
 import type {
-  TQProTableProps,
+  PMProTableProps,
   TableColumnsType,
   TableEmit,
   FilterDropdownProps,
-  TQColumnType,
+  PMColumnType,
   DataInfo
 } from './types'
 import type { TableCurrentDataSource } from "ant-design-vue/es/table/interface"
 import type { FormInstance } from "../ProForm/types"
-import type { Opt, TQSetupContext } from "./types"
+import type { Opt, PMSetupContext } from "./types"
 import type { RightClickMenuInstance } from "./components/RightClickMenu"
 
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE
 
-export default defineComponent<TQProTableProps>(function TQProTable(_, {
+export default defineComponent<PMProTableProps>(function PMProTable(_, {
   attrs,
   emit,
   expose,
   slots
-}: TQSetupContext<TQProTableProps, TableEmit>) {
+}: PMSetupContext<PMProTableProps, TableEmit>) {
   const {
     isInitRequest = true,
     request,
@@ -181,7 +181,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   })
 
   // 排序点击的 DOM
-  const sortVirtualNode = (item: TQColumnType) => {
+  const sortVirtualNode = (item: PMColumnType) => {
     const style = (so: SortOrder) => ({
       fontSize: '12px',
       color: (vSortOrder.value === so && oldSortOrder.value === item.dataIndex) ? ThemeColor : '#9b9c9e'
@@ -286,7 +286,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
       }
 
       // 数字靠右保留两位小数
-      function rValueIsNumber(columnsItem: TQColumnType) {
+      function rValueIsNumber(columnsItem: PMColumnType) {
         if (columnsItem.children?.length) {
           for (const itez of columnsItem.children) {
             rValueIsNumber(itez)
@@ -353,7 +353,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
       /**
        * 递归添加索引做个标识在哪个位置，有子孩子
        */
-      function rIdx(columnsItem: TQColumnType) {
+      function rIdx(columnsItem: PMColumnType) {
         // 找到当前这个拿到索引
         const findIdx = sameLevel.findIndex((itex) => itex.dataIndex === columnsItem.dataIndex)
 
@@ -388,7 +388,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
       /**
        * 递归添加单元格点击事件
        */
-      function rCell(columnsItem: TQColumnType) {
+      function rCell(columnsItem: PMColumnType) {
         if (columnsItem.children?.length) {
           for (const cItex of columnsItem.children) {
             rCell(cItex)
@@ -687,7 +687,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
   /**
    * 虚拟列表排序
    */
-  const handleSortVirtual = (item: TQColumnType) => {
+  const handleSortVirtual = (item: PMColumnType) => {
     if (finallyDataSource.value.length === 0) {
       return
     }
@@ -1010,7 +1010,7 @@ export default defineComponent<TQProTableProps>(function TQProTable(_, {
           {/* 高级 form 组件 */}
           {
             attrs.search !== false && (
-              <TQProForm
+              <PMProForm
                 ref={tQProFormRef}
                 search={attrs.search}
                 formListData={notHideInSearchColumns.value}

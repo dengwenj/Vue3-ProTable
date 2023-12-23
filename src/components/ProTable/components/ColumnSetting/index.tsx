@@ -10,11 +10,11 @@ import { SettingOutlined } from '@ant-design/icons-vue'
 import OperateContent from "./components/OperateContent"
 
 import type { Emit, OperateContentProps } from './components/OperateContent/types'
-import type { TQSetupContext } from "../../types"
+import type { PMSetupContext } from "../../types"
 
 export default defineComponent<OperateContentProps>(function ColumnSetting(_, {
   emit
-}: TQSetupContext<any, Emit>) {
+}: PMSetupContext<any, Emit>) {
   const attrs = useAttrs() as unknown as OperateContentProps
 
   return () => (

@@ -9,11 +9,11 @@ import { CopyOutlined, CheckOutlined } from '@ant-design/icons-vue'
 import { fnCopy } from '../../utils'
 import { ThemeColor } from '../../conf'
 
-import type { Opt, TQSetupContext } from '../../types'
+import type { Opt, PMSetupContext } from '../../types'
 
 export default defineComponent<{ opt: Opt }>(function useCopyable(_, {
   attrs
-}: TQSetupContext) {
+}: PMSetupContext) {
   const isCopy = ref(false)
   const copyDataIndex = ref('')
   const copyIdx = ref()

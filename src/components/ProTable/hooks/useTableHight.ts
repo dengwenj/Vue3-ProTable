@@ -5,10 +5,10 @@
  */
 import { onMounted, ref, type Ref } from "vue"
 
-import type { TQProTableProps } from "../types"
+import type { PMProTableProps } from "../types"
 interface useTableHeightProps {
   tQProFormRef: Ref
-  attrs: TQProTableProps
+  attrs: PMProTableProps
   clientHeight: Ref<number>
 }
 

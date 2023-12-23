@@ -1,10 +1,10 @@
 import type { GetComponentProps } from "ant-design-vue/es/vc-table/interface"
-import type { TQProTableProps, TableColumnsType } from "../../types"
+import type { PMProTableProps, TableColumnsType } from "../../types"
 
 export interface VirtualListProps<RecordType = any> {
   classKey?: string
   rowHeight?: number
-  tableAttrs?: TQProTableProps
+  tableAttrs?: PMProTableProps
   finallyDataSource: Record<string, any>[]
   notHideInTableColumns: TableColumnsType
   heightY: number

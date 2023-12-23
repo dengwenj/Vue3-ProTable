@@ -9,12 +9,12 @@ import { ProTable } from "@/components"
 import { Button, Select, Space, Tag } from "ant-design-vue"
 import dayjs from "dayjs"
 
-import type { TQProTableInstance, TableColumnsType } from "@/components/ProTable/types"
+import type { PMProTableInstance, TableColumnsType } from "@/components/ProTable/types"
 
 export default defineComponent(function VirtualTable() {
   const seleRowKey = ref<any[]>([])
   const total = ref(10000)
-  const proTableRef = ref<TQProTableInstance>()
+  const proTableRef = ref<PMProTableInstance>()
 
   const columns = computed<TableColumnsType>(() => {
     return [

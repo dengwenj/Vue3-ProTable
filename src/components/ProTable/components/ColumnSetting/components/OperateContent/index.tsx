@@ -10,11 +10,11 @@ import { HolderOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/
 import './index.less'
 
 import type { OperateContentProps, Emit } from './types'
-import type { TQSetupContext } from "@/components/ProTable/types"
+import type { PMSetupContext } from "@/components/ProTable/types"
 
 export default defineComponent<OperateContentProps>(function OperateContent(_, {
   emit
-}: TQSetupContext<any, Emit>) {
+}: PMSetupContext<any, Emit>) {
   const attrs = useAttrs() as unknown as OperateContentProps
 
   const initColumnsTitleList = ref(
