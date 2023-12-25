@@ -119,7 +119,10 @@ export default function useBatchCopy({
       // 保存批量选中的 key
       const keyList: string[] = ([])
       for (let i = f; i <= b; i++) {
-        if (sameLevelList.value[i]?.title === '操作') {
+        if (
+          sameLevelList.value[i]?.title === '操作'
+          || sameLevelList.value[i]?.dataIndex === 'dragSort'
+        ) {
           return
         }
         

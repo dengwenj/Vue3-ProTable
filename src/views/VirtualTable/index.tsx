@@ -6,14 +6,14 @@
 import { computed, defineComponent, ref } from "vue"
 
 import { ProTable } from "@/components"
-import { Button, Select, Space, Tag } from "ant-design-vue"
+import { Button, Select, Space, Tag, message } from "ant-design-vue"
 import dayjs from "dayjs"
 
 import type { PMProTableInstance, TableColumnsType } from "@/components/ProTable/types"
 
 export default defineComponent(function VirtualTable() {
   const seleRowKey = ref<any[]>([])
-  const total = ref(10000)
+  const total = ref(1000)
   const proTableRef = ref<PMProTableInstance>()
 
   const columns = computed<TableColumnsType>(() => {
@@ -92,26 +92,13 @@ export default defineComponent(function VirtualTable() {
       },
       {
         title: '合并',
-        dataIndex: 'rowSpan',
+        dataIndex: 'price',
         width: 150,
         hideInSearch: true,
         customFilterDropdown: true,
         customCell(record, index) {
-          let rowSpan
-          if (index === 1) {
-            rowSpan = 2
-          }
-          if ([2].includes(index!)) {
-            rowSpan = 0
-          }
-          if (index === 7) {
-            rowSpan = 4
-          }
-          if ([8, 9, 10].includes(index!)) {
-            rowSpan = 0
-          }
           return {
-            rowSpan
+            rowSpan: record.rowSpan
           }
         }
       },
@@ -168,6 +155,12 @@ export default defineComponent(function VirtualTable() {
 
   return () => (
     <ProTable
+      dragRow={{
+        onDragSortEnd(beforeIndex, afterIndex, newDataSource) {
+          console.log(beforeIndex, afterIndex, newDataSource)
+          message.success(`起始位置${beforeIndex}，结束位置${afterIndex}，拖拽成功`)
+        }
+      }}
       ref={proTableRef}
       classKey="pro-table-v"
       isVirtual
@@ -215,10 +208,21 @@ export default defineComponent(function VirtualTable() {
         <Button type='primary'>批量操作</Button>
       ]}
       request={async () => {
-        const data = await new Promise<Record<string, any>[]>((resolve) => {
+        let data = await new Promise<Record<string, any>[]>((resolve) => {
           setTimeout(() => {
             const arr = []
             for (let i = 0; i < total.value; i++) {
+              let price
+              if (i < 5) {
+                price = 5.1
+              } else if (i < 10) {
+                price = 331.20
+              } else if (i < 20) {
+                price = 531.11
+              } else {
+                price = 431.98
+              }
+
               arr.push({
                 id: i,
                 name: `朴睦${i + 1}`,
@@ -226,7 +230,7 @@ export default defineComponent(function VirtualTable() {
                 sex: '男',
                 amount: i + 2023,
                 date: new Date().getTime() + i * 1000,
-                rowSpan: '我来把相同的价格合并下',
+                price,
                 phone: `1311234567${i}`,
                 address: '上海市浦东新区',
                 多级1pro: '多级1pro',
@@ -238,6 +242,34 @@ export default defineComponent(function VirtualTable() {
             resolve(arr)
           }, 200)
         })
+
+        let rowSpan = 1
+        // 要开始合并的从哪个开始
+        let n = 0
+        const rowSpanList: number[] = []
+        for (let i = 0; i < data.length; i++) {
+          const item = data[i]
+          let pre: Record<string, any> = {}
+          if (i !== 0) {
+            pre = data[i - 1]
+          }
+
+          if (pre.price === item.price) {
+            rowSpanList[i] = 0
+            rowSpan += 1
+            rowSpanList[n] = rowSpan
+          } else {
+            rowSpanList.push(1)
+            rowSpan = 1
+            n = i
+          }
+        }
+
+        data = data.map((item, index) => ({
+          ...item,
+          rowSpan: rowSpanList[index]
+        }))
+
         return {
           data
         }

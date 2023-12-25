@@ -215,6 +215,15 @@ export interface PMProTableProps<T = any> extends TableProps<T> {
   defaultScroll?: boolean
   // 是否右键菜单
   isRightMenu?: boolean
+  // 行拖拽排序
+  dragRow?: {
+    column?: PMColumnType
+    onDragSortEnd?: (
+      beforeIndex: number,
+      afterIndex: number,
+      newDataSource: any[],
+    ) => void
+  }
 }
 
 export interface TableEmit {

@@ -20,7 +20,7 @@ import {
   Empty,
   InputSearch
 } from "ant-design-vue"
-import { ReloadOutlined, CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons-vue'
+import { ReloadOutlined, CaretUpOutlined, CaretDownOutlined, HolderOutlined } from '@ant-design/icons-vue'
 
 import FilterDropdown from "./components/filterDropdown"
 import PMProForm from "../ProForm"
@@ -46,6 +46,7 @@ import type { TableCurrentDataSource } from "ant-design-vue/es/table/interface"
 import type { FormInstance } from "../ProForm/types"
 import type { Opt, PMSetupContext } from "./types"
 import type { RightClickMenuInstance } from "./components/RightClickMenu"
+import type { AdditionalProps } from "ant-design-vue/es/vc-table/interface"
 
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE
 
@@ -134,6 +135,12 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
   const rightClickMenuRef = ref<RightClickMenuInstance>()
   // 右键点击的行内容
   const rightRecord = ref<Record<string, any>>({})
+  // 行是否拖拽
+  const isRowDrag = ref(false)
+  // 拖拽的起始位置
+  const dragStartIndex = ref<number | undefined>(undefined)
+  // 拖拽的结束位置
+  const dragEndIndex = ref<number | undefined>(undefined)
 
   provide<DataInfo>('dataInfo', {
     notHideInTableColumns,
@@ -219,6 +226,27 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
         customRender(opt: Opt) {
           return <div>{(opt.record.idx ? opt.record.idx + 1 : undefined) ?? opt.index + 1}</div>
         }
+      })
+    }
+
+    // 行拖拽
+    if (attrs.dragRow) {
+      const { column } = attrs.dragRow
+      notHideInTableColumns.value.unshift({
+        ...column,
+        title: column?.title ?? '排序',
+        dataIndex: column?.dataIndex ?? 'dragSort',
+        width: column?.width ?? 60,
+        fixed: 'left',
+        customRender: column?.customRender
+          ? column.customRender({} as any)
+          : () => (
+            <HolderOutlined
+              class='darg-icon'
+              onMouseenter={() => isRowDrag.value = true}
+              onMouseleave={() => isRowDrag.value = false}
+            />
+          )
       })
     }
 
@@ -962,7 +990,7 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
   /**
    * 表格行 row 属性
    */
-  const customRow = (record: Record<string, any>, index: number | undefined) => {
+  const customRow = (record: Record<string, any>, index: number | undefined): AdditionalProps => {
     // 外部写的 row 操作
     const props = attrs.customRow?.(record, index)
 
@@ -979,14 +1007,54 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
       },
     } : {}
 
+    // 行拖拽
+    const dragProp = attrs.dragRow ? {
+      onDragstart(e: DragEvent) {
+        dragStartIndex.value = index
+      },
+      onDragover(e: DragEvent) {
+        e.preventDefault()
+      },
+
+      onDrop(e: DragEvent) {
+        dragEndIndex.value = index
+
+        // 交换位置
+        finallyDataSource.value.splice(
+          dragEndIndex.value!,
+          1,
+          ...finallyDataSource.value.splice(
+            dragStartIndex.value!, 1, finallyDataSource.value[dragEndIndex.value!]
+          )
+        )
+
+        if (attrs.isVirtual) {
+          // 索引变一下
+          finallyDataSource.value = finallyDataSource.value.map((item, idx) => ({
+            ...item,
+            idx
+          }))
+        }
+
+        attrs.dragRow?.onDragSortEnd?.(
+          dragStartIndex.value!,
+          index!,
+          finallyDataSource.value
+        )
+      },
+    } : {}
+
     return {
+      draggable: isRowDrag.value,
       style: {
+        cursor: isRowDrag.value ? 'pointer' : 'auto',
         height: `${rowHeight.value}px`,
         backgroundColor: rightClickMenuRef.value?.isShow && rightRowIdx.value === index
           ? ThemeColor
-          : index! % 2 === 0 ? '#fafafa' : '#fff',
+          : index! % 2 === 0 && !attrs.isVirtual ? '#fafafa' : '#fff',
       },
       ...rightMenu,
+      ...dragProp,
       ...props
     }
   }

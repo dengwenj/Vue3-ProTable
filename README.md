@@ -14,7 +14,8 @@ npm install vue3-procomponents
 #### 5、支持模糊搜索
 #### 6、支持列设置
 #### 7、右键菜单功能
-#### 8、表格拖拽排序，编辑表格待开发
+#### 8、表格拖拽排序
+#### 9、编辑表格待开发
 #### 更多请看文档和网站
 #### 文档 -> src/components/ProTable/types.d.ts
 

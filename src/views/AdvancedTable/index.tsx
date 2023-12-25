@@ -4,7 +4,7 @@
  * @description 高级表格
  */
 import { computed, defineComponent } from "vue"
-import { Button, Dropdown, Menu, Space, Tag } from "ant-design-vue"
+import { Button, Dropdown, Menu, Space, Tag, message } from "ant-design-vue"
 import { EllipsisOutlined } from '@ant-design/icons-vue'
 
 import ProTable from "@/components/ProTable"
@@ -151,6 +151,12 @@ export default defineComponent(function AdvancedTable() {
 
   return () => (
     <ProTable
+      dragRow={{
+        onDragSortEnd(beforeIndex, afterIndex, newDataSource) {
+          console.log(beforeIndex, afterIndex, newDataSource)
+          message.success(`起始位置${beforeIndex}，结束位置${afterIndex}，拖拽成功`)
+        }
+      }}
       isSerialNumber
       columns={columns.value}
       toolBarRender={() => [
