@@ -270,7 +270,7 @@ export default defineComponent<FilterDropdownProps>(function FilterDropdown(_, {
           <Button
             size='small'
             type='link'
-            disabled={checkAllState.checkList.length === attrs.column?.customFilters?.length}
+            // disabled={checkAllState.checkList.length === attrs.column?.customFilters?.length}
             onClick={handleReset}
           >
             重置

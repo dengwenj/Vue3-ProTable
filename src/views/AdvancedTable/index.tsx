@@ -12,6 +12,7 @@ import ProTable from "@/components/ProTable"
 import type { TableColumnsType } from "@/components/ProTable/types"
 
 interface DataItem {
+  id: number
   medicine: string
   martialArts: string
   calligraphy: string
@@ -199,6 +200,7 @@ export default defineComponent(function AdvancedTable() {
           const data: DataItem[] = []
           for (let i = 0; i < 100; i++) {
             data.push({
+              id: i,
               medicine: `医学${i}`,
               martialArts: `武术${i}`,
               calligraphy: `书法${i}`,

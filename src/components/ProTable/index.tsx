@@ -141,6 +141,8 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
   const dragStartIndex = ref<number | undefined>(undefined)
   // 拖拽的结束位置
   const dragEndIndex = ref<number | undefined>(undefined)
+  // 是否表头筛选
+  const isHeadFilter = ref(false)
 
   provide<DataInfo>('dataInfo', {
     notHideInTableColumns,
@@ -536,7 +538,30 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
 
     // TODO
     if (attrs.isVirtual) {
-      originDataSource.value = val
+      if (!isHeadFilter.value) {
+        originDataSource.value = val
+      }
+
+      // 加上数据
+      notHideInTableColumns.value = notHideInTableColumns.value.map((item) => {
+        return {
+          ...item,
+          // 自定义筛选数据
+          customFilters: originDataSource.value
+            .map((itex) => itex[item.dataIndex as string])
+            .reduce((pre, item) => {
+              if (pre.some((itex: any) => itex === item)) {
+                return pre
+              }
+
+              // 每一项不为空
+              if (item !== '' && (item ?? false)) {
+                pre.push(item)
+              }
+              return pre
+            }, [] as string[])
+        }
+      })
     }
   }, { deep: true })
 
@@ -693,6 +718,7 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
       const filterList = dataSourceFilter(originDataSource.value, filters)
       // 把筛选 list 传递给业务组件
       emit('filterListChange', filterList)
+      isHeadFilter.value = true
       finallyDataSource.value = filterList.map((item, idx) => ({ ...item, idx }))
       // filter 受控的，更新 columns，不更新筛选不会变
       notHideInTableColumns.value = notHideInTableColumns.value.map((item) => {
@@ -829,6 +855,7 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
     searchAll.value = ''
     vSortOrder.value = SortOrder.Origin
     oldSortOrder.value = ''
+    isHeadFilter.value = false
 
     let isFlag = false
     if (isReset || current.value !== 1) {
@@ -859,6 +886,13 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
       if (!isFlag) {
         finallyDataSource.value = originDataSource.value.map((item, idx) => ({ ...item, idx }))
       }
+    }
+
+    if (!isFlag) {
+      // TODO
+      setTimeout(() => {
+        isFilterDropDownMount.value = true
+      })
     }
 
     // 排序受控
@@ -928,6 +962,7 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
     }))
     // 把筛选 list 传递给业务组件
     emit('filterListChange', finallyDataSource.value)
+    isHeadFilter.value = true
   }
 
   /**
@@ -1017,6 +1052,9 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
       },
 
       onDrop(e: DragEvent) {
+        if (index === dragStartIndex.value) {
+          return
+        }
         dragEndIndex.value = index
 
         // 交换位置
