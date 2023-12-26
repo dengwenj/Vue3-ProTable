@@ -91,15 +91,17 @@ export default defineComponent<VirtualListProps>(function VirtualList() {
       {{
         // item 是每一行的数据
         default: (item: Record<string, any>) => {
+          const rowProps = attrs.customRow?.(item, item.idx)
           return (
             <div
               class='row-item'
+              {...rowProps}
               style={{
-                backgroundColor: attrs.selectedRowKeys?.includes(item.id) ? '#e6f4ff' : 'transparent',
+                ...rowProps?.style as any,
+                backgroundColor: attrs.selectedRowKeys?.includes(item.id) ? '#e6f4ff' : (rowProps?.style as any).backgroundColor,
                 // 整行的宽度
                 width: `${rowItemWidth.value || attrs.notHideInTableColumns.reduce((pre, item) => pre + (item.width as number || 0), 0)}px`,
               }}
-              {...attrs.customRow?.(item, item.idx)}
             >
               {
                 // attrs.notHideInTableColumns
