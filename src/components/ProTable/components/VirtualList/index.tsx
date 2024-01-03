@@ -79,113 +79,115 @@ export default defineComponent<VirtualListProps>(function VirtualList() {
   }
 
   return () => (
-    <VL
-      data={attrs.finallyDataSource}
-      height={attrs.heightY}
-      flxedBlockHeight={attrs.rowHeight || 26}
-      pageMode={false}
-      rowWidth={finallyColumns.value.reduce((pre, item) => pre + (item.width as number || 0), 0)}
-      classKey={attrs.classKey || ''}
-      initEmptyQuery={attrs.initEmptyQuery}
-    >
-      {{
-        // item 是每一行的数据
-        default: (item: Record<string, any>) => {
-          const rowProps = attrs.customRow?.(item, item.idx)
-          return (
-            <div
-              class='row-item'
-              {...rowProps}
-              style={{
-                ...rowProps?.style as any,
-                backgroundColor: attrs.selectedRowKeys?.includes(item.id) ? '#e6f4ff' : (rowProps?.style as any).backgroundColor,
-                // 整行的宽度
-                width: `${rowItemWidth.value || attrs.notHideInTableColumns.reduce((pre, item) => pre + (item.width as number || 0), 0)}px`,
-              }}
-            >
-              {
-                // attrs.notHideInTableColumns
-                finallyColumns.value.map((itex, ity) => {
-                  // itex 是 column 每一个数据
-                  // 移动多少
-                  const offset = [...thEls.value].filter((_, idz) => idz < ity).reduce((pre, item) => pre + (item.offsetWidth as number), 0)
-                  const obj: StyleValue = itex.fixed ? {
-                    zIndex: 999,
-                    background: '#fff',
-                    position: 'sticky',
-                    [itex.fixed as 'left' | 'right']: `${itex.fixed === 'left' ? offset : 0}px`,
-                    boxShadow: `${itex.fixed === 'left' ? 3 : -3}px 0px 6px #eee`,
-                  } : {}
+    <>
+      <VL
+        data={attrs.finallyDataSource}
+        height={attrs.heightY}
+        flxedBlockHeight={attrs.rowHeight || 26}
+        pageMode={false}
+        rowWidth={finallyColumns.value.reduce((pre, item) => pre + (item.width as number || 0), 0)}
+        classKey={attrs.classKey || ''}
+        initEmptyQuery={attrs.initEmptyQuery}
+      >
+        {{
+          // item 是每一行的数据
+          default: (item: Record<string, any>) => {
+            const rowProps = attrs.customRow?.(item, item.idx)
+            return (
+              <div
+                class='row-item'
+                {...rowProps}
+                style={{
+                  ...rowProps?.style as any,
+                  backgroundColor: attrs.selectedRowKeys?.includes(item.id) ? '#e6f4ff' : (rowProps?.style as any).backgroundColor,
+                  // 整行的宽度
+                  width: `${rowItemWidth.value || attrs.notHideInTableColumns.reduce((pre, item) => pre + (item.width as number || 0), 0)}px`,
+                }}
+              >
+                {
+                  // attrs.notHideInTableColumns
+                  finallyColumns.value.map((itex, ity) => {
+                    // itex 是 column 每一个数据
+                    // 移动多少
+                    const offset = [...thEls.value].filter((_, idz) => idz < ity).reduce((pre, item) => pre + (item.offsetWidth as number), 0)
+                    const obj: StyleValue = itex.fixed ? {
+                      zIndex: 999,
+                      background: '#fff',
+                      position: 'sticky',
+                      [itex.fixed as 'left' | 'right']: `${itex.fixed === 'left' ? offset : 0}px`,
+                      boxShadow: `${itex.fixed === 'left' ? 3 : -3}px 0px 6px #eee`,
+                    } : {}
 
-                  const cellProps = itex.customCell?.(item, item.idx, itex)
-                  // rowSpan 为 undefined 或 0 时 td 就是默认的高度
-                  // rowSpan 有值时，td 的高度为 rowSpan * rowHeight
-                  const rowSpanStyle = cellProps?.rowSpan ? {
-                    height: `${cellProps?.rowSpan * (attrs.rowHeight || 26)}px`,
-                    zIndex: 999,
-                    marginTop: `${(cellProps.rowSpan - 1) * (attrs.rowHeight || 26)}px`
-                  } : {
-                    height: `${(attrs.rowHeight || 26)}px`,
-                    borderBottom: cellProps?.rowSpan === 0 ? "0px" : '1px solid #f0f0f0'
-                  }
-                  // 有 rowSpan td 的样式
-                  const rowSpanTdStyle = cellProps?.rowSpan ? {
-                    display: 'flex',
-                    alignItems: 'center'
-                  } : {}
+                    const cellProps = itex.customCell?.(item, item.idx, itex)
+                    // rowSpan 为 undefined 或 0 时 td 就是默认的高度
+                    // rowSpan 有值时，td 的高度为 rowSpan * rowHeight
+                    const rowSpanStyle = cellProps?.rowSpan ? {
+                      height: `${cellProps?.rowSpan * (attrs.rowHeight || 26)}px`,
+                      zIndex: 999,
+                      marginTop: `${(cellProps.rowSpan - 1) * (attrs.rowHeight || 26)}px`
+                    } : {
+                      height: `${(attrs.rowHeight || 26)}px`,
+                      borderBottom: cellProps?.rowSpan === 0 ? "0px" : '1px solid #f0f0f0'
+                    }
+                    // 有 rowSpan td 的样式
+                    const rowSpanTdStyle = cellProps?.rowSpan ? {
+                      display: 'flex',
+                      alignItems: 'center'
+                    } : {}
 
-                  return (
-                    <div
-                      class='td-item'
-                      style={{
-                        width: `${(thEls.value[ity]?.offsetWidth || itex.width)}px`,
-                        ...obj,
-                        ...rowSpanStyle,
-                        ...cellProps?.style as Record<string, string>
-                      }}
-                      {...cellProps}
-                    >
-                      {
-                        itex.customRender
-                          ? (
-                            <div
-                              class={'custom-render'}
-                              style={{
-                                lineHeight: itex.isCustomRenderStyle !== false ? `${attrs.rowHeight || 26}px` : '',
-                                padding: itex.isCustomRenderStyle !== false ? '0 10px' : '',
-                                ...rowSpanTdStyle
-                              }}
-                            >
-                              {cellProps?.rowSpan !== 0 && itex.customRender({
-                                index: item.idx,
-                                renderIndex: item.idx,
-                                text: item[itex.dataIndex as string],
-                                value: item[itex.dataIndex as string],
-                                record: item,
-                                column: itex,
-                              })}
-                            </div>
-                          ) : (
-                            <div
-                              class='custom-render'
-                              style={{
-                                lineHeight: `${attrs.rowHeight || 26}px`,
-                                padding: '0 10px',
-                                ...rowSpanTdStyle
-                              }}
-                            >
-                              {cellProps?.rowSpan !== 0 && item[itex.dataIndex as string]}
-                            </div>
-                          )
-                      }
-                    </div>
-                  )
-                })
-              }
-            </div>
-          )
-        }
-      }}
-    </VL>
+                    return (
+                      <div
+                        class='td-item'
+                        style={{
+                          width: `${(thEls.value[ity]?.offsetWidth || itex.width)}px`,
+                          ...obj,
+                          ...rowSpanStyle,
+                          ...cellProps?.style as Record<string, string>
+                        }}
+                        {...cellProps}
+                      >
+                        {
+                          itex.customRender
+                            ? (
+                              <div
+                                class={'custom-render'}
+                                style={{
+                                  lineHeight: itex.isCustomRenderStyle !== false ? `${attrs.rowHeight || 26}px` : '',
+                                  padding: itex.isCustomRenderStyle !== false ? '0 10px' : '',
+                                  ...rowSpanTdStyle
+                                }}
+                              >
+                                {cellProps?.rowSpan !== 0 && itex.customRender({
+                                  index: item.idx,
+                                  renderIndex: item.idx,
+                                  text: item[itex.dataIndex as string],
+                                  value: item[itex.dataIndex as string],
+                                  record: item,
+                                  column: itex,
+                                })}
+                              </div>
+                            ) : (
+                              <div
+                                class='custom-render'
+                                style={{
+                                  lineHeight: `${attrs.rowHeight || 26}px`,
+                                  padding: '0 10px',
+                                  ...rowSpanTdStyle
+                                }}
+                              >
+                                {cellProps?.rowSpan !== 0 && item[itex.dataIndex as string]}
+                              </div>
+                            )
+                        }
+                      </div>
+                    )
+                  })
+                }
+              </div>
+            )
+          }
+        }}
+      </VL>
+    </>
   )
 })
