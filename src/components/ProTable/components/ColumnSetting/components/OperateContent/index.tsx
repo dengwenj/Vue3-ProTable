@@ -17,13 +17,13 @@ export default defineComponent<OperateContentProps>(function OperateContent(_, {
 }: PMSetupContext<any, Emit>) {
   const attrs = useAttrs() as unknown as OperateContentProps
 
-  const initColumnsTitleList = ref(
-    [...attrs.notHideInTableColumns.map((item) => `${item.label || item.originTitle || item.title}$${item.fixed}`)]
-  )
+  const initColumnsTitleList = ref([...attrs.notHideInTableColumns.map((item) =>
+    `${item.label || item.originTitle || item.title}$${item.fixed}`)
+  ])
   // 需要 fixed 做判断
-  const columnsTitleList = ref(
-    [...attrs.notHideInTableColumns.map((item) => `${item.label || item.originTitle || item.title}$${item.fixed}`)]
-  )
+  const columnsTitleList = ref([...attrs.notHideInTableColumns.map((item) =>
+    `${item.label || item.originTitle || item.title}$${item.fixed}`)
+  ])
   const checkAllState = reactive({
     indeterminate: false,
     checked: true,
@@ -100,7 +100,7 @@ export default defineComponent<OperateContentProps>(function OperateContent(_, {
       return {
         ...item,
         // 1 代表删除, 为 true 说明是勾选的就是 0
-        delFlag: checkedValue.includes(`${item.label || item.title}$${item.fixed}`) ? 0 : 1
+        delFlag: checkedValue.includes(`${item.label || item.originTitle || item.title}$${item.fixed}`) ? 0 : 1
       }
     })
     emit('changeColumns', columnsList.value)
