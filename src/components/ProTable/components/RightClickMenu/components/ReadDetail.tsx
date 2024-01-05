@@ -59,7 +59,7 @@ export default defineComponent<{ onReadDetail: () => void }>(function ReadDetail
         {cs.map((item) => {
           const value = dataInfo.rightRecord.value[item.dataIndex as string]
           return (
-            <Descriptions.Item label={typeof item.title === 'string' ? item.title : item.originTitle}>
+            <Descriptions.Item label={typeof item.title === 'string' ? item.title : (item.label || item.originTitle)}>
               {item.customRender ? item.customRender({
                 value,
                 text: value,
