@@ -326,7 +326,7 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
             columnsItem.customRender = (opt) => {
               return (
                 <div style={{ textAlign: 'right', width: '100%' }}>
-                  {opt.text && formatNumber(opt.text, 2)}
+                  {opt.text && formatNumber(+opt.text, 2)}
                 </div>
               )
             }
