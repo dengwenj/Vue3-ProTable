@@ -232,12 +232,6 @@ export default defineComponent(function VirtualTable() {
     <ProTable
       dataSource={dataSource.value}
       loading={loading.value}
-      dragRow={{
-        onDragSortEnd(beforeIndex, afterIndex, newDataSource) {
-          dataSource.value = rowSpanFn(newDataSource)
-          message.success(`起始位置${beforeIndex}，结束位置${afterIndex}，拖拽成功`)
-        }
-      }}
       ref={proTableRef}
       classKey="pro-table-v"
       isVirtual

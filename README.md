@@ -7,6 +7,7 @@
 ```
 npm install vue3-procomponents
 ``` -->
+#### [文档地址](https://github.com/dengwenj/Vue3-ProTable/blob/main/src/components/ProTable/types.d.ts)
 #### 1、支持书写 jsx、vue 文件
 #### 2、支持表单搜索
 #### 3、支持虚拟列表
@@ -17,9 +18,8 @@ npm install vue3-procomponents
 #### 8、表格拖拽排序
 #### 9、编辑表格待开发
 #### 更多请看文档和网站
-#### 文档 -> src/components/ProTable/types.d.ts
 
-### 使用🔨
+### 🔨使用
 ```tsx
 import { computed, defineComponent } from "vue"
 import { Button, Dropdown, Menu, Space, Tag } from "ant-design-vue"
