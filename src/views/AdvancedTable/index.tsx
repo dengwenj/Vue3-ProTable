@@ -8,6 +8,7 @@ import { Button, Dropdown, Menu, Space, Tag, message } from "ant-design-vue"
 import { EllipsisOutlined } from '@ant-design/icons-vue'
 
 import ProTable from "@/components/ProTable"
+// import { ProTable } from "vue3-procomponents"
 
 import type { TableColumnsType } from "@/components/ProTable/types"
 

@@ -16,23 +16,25 @@ import type {
   UploadProps,
   TimePickerProps,
   FormItemProps,
-  FormInstance,
   CascaderProps,
   FormProps,
-  InputSearch,
   TextAreaProps
 } from "ant-design-vue"
+
 import type { ColumnType } from "ant-design-vue/es/table"
-import type { FormInstance } from "../ProForm/types"
+import type { FormInstance } from "./ProForm/types"
 import type { 
-  SlotsType, 
   EmitsOptions,
   SlotsType,
   Slot,
   ObjectEmitsOptions,
   Slots, 
-  Ref
+  Ref,
+  CSSProperties,
+  StyleValue
 } from "vue"
+import type { ColumnFilterItem, FilterConfirmProps } from "ant-design-vue/es/table/interface"
+import type { Key } from "ant-design-vue/es/_util/type"
 
 // 要显示什么样的组件
 type ValueType = 'input' | 'select' | 'inputNumber' | 'datePicker' | 'radio'
@@ -95,7 +97,7 @@ type FieldPropsType = {
   componentProps: Record<string, any> & OtherType
 } | {
   type: 'inputSearch'
-  componentProps: InputSearch & OtherType
+  componentProps: InputProps & OtherType
 } | {
   type: 'textarea',
   componentProps: TextAreaProps & OtherType
@@ -240,7 +242,7 @@ export interface PMProTableInstance {
   heightY: number
 }
 
-interface FilterDropdownProps {
+export interface FilterDropdownProps {
   prefixCls?: string;
   setSelectedKeys?: (selectedKeys: Key[]) => void;
   selectedKeys?: Key[];

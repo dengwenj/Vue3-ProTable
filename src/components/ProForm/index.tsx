@@ -363,7 +363,11 @@ export default defineComponent<ProFormProps>(function ProForm(_, {
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                   <DatePicker
                                     value={formState.value[itex]}
-                                    onChange={(val) => formState.value[itex] = val}
+                                    onChange={(val) => {
+                                      formState.value[itex] = val
+                                      const key = item.dataIndex as string
+                                      key && (formState.value[key][idx] = val)
+                                    }}
                                     placement='bottomRight'
                                     {...item.fieldProps?.componentProps as any}
                                   />

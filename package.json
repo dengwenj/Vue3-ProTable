@@ -1,6 +1,6 @@
 {
   "name": "vue3-procomponents",
-  "version": "1.2.4",
+  "version": "2.0.2",
   "scripts": {
     "dev": "vite",
     "build": "run-p \"build-only {@}\" --",
@@ -9,9 +9,16 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
   },
   "main": "./src/components/lib/protable.umd.js",
+  "types": "./src/components/index.d.ts",
   "author": {
     "name": "朴睦"
   },
+  "keywords": [
+    "vue",
+    "protable",
+    "table",
+    "ant design vue"
+  ],
   "dependencies": {
     "ant-design-vue": "^4.0.6",
     "dayjs": "^1.11.10",
