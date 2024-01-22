@@ -4,13 +4,13 @@
  * @description APP 入口页面
  */
 import { defineComponent } from "vue"
+import { ConfigProvider } from "ant-design-vue"
 
 import Layout from "./views/Layout"
 
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import 'dayjs/locale/zh-cn'
 import './App.less'
-import { ConfigProvider } from "ant-design-vue"
 
 export default defineComponent(function App() {
   return () => (

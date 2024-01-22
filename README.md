@@ -3,10 +3,11 @@
 ### 灵感来源于 AntDesign 的 pro-components 高级组件库(React)
 * 打造一个基于 Vue 的 ProTable 高级组件
 
-<!-- ### 安装
+### 安装
 ```
 npm install vue3-procomponents
-``` -->
+```
+
 #### [文档地址](https://github.com/dengwenj/Vue3-ProTable/blob/main/src/components/ProTable/types.d.ts)
 #### 1、支持书写 jsx、vue 文件
 #### 2、支持表单搜索
@@ -20,6 +21,20 @@ npm install vue3-procomponents
 #### 更多请看文档和网站
 
 ### 🔨使用
+```ts
+import { createApp } from 'vue'
+
+import App from './App'
+import router from './router'
+// 引入 vue3-procomponents 的样式
+import 'vue3-procomponents/src/components/lib/style.css'
+ 
+const app = createApp(App)
+
+app.use(router)
+
+app.mount('#app')
+```
 ```tsx
 import { computed, defineComponent } from "vue"
 import { Button, Dropdown, Menu, Space, Tag } from "ant-design-vue"
