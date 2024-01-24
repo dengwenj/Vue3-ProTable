@@ -1154,6 +1154,7 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
                         selectedRowKeys={selectedRowKeys.value}
                         initEmptyQuery={initEmptyQuery.value}
                         customRow={customRow}
+                        dataChangeWantSomething={attrs.dataChangeWantSomething}
                       />
                     )
                   }

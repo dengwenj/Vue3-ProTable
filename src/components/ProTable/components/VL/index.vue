@@ -76,6 +76,9 @@ export default {
     },
     initEmptyQuery: {
       type: Boolean
+    },
+    dataChangeWantSomething: {
+      type: Boolean
     }
   },
   components: {
@@ -108,7 +111,7 @@ export default {
         // 如果存在旧值
         if (preData) {
           nextTick(() => {
-            vb.value.scrollTop = 0;
+            props.dataChangeWantSomething !== false && (vb.value.scrollTop = 0);
             handleScroll();
           });
         }

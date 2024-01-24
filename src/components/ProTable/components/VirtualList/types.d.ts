@@ -11,4 +11,5 @@ export interface VirtualListProps<RecordType = any> {
   selectedRowKeys?: string[]
   initEmptyQuery?: boolean
   customRow?:  GetComponentProps<RecordType>
+  dataChangeWantSomething?: boolean
 }

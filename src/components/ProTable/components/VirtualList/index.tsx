@@ -88,6 +88,7 @@ export default defineComponent<VirtualListProps>(function VirtualList() {
         rowWidth={finallyColumns.value.reduce((pre, item) => pre + (item.width as number || 0), 0)}
         classKey={attrs.classKey || ''}
         initEmptyQuery={attrs.initEmptyQuery}
+        dataChangeWantSomething={attrs.dataChangeWantSomething}
       >
         {{
           // item 是每一行的数据

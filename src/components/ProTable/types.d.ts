@@ -226,6 +226,8 @@ export interface PMProTableProps<T = any> extends TableProps<T> {
       newDataSource: any[],
     ) => void
   }
+  // 数据改变要不要做某些事
+  dataChangeWantSomething?: boolean
 }
 
 export interface TableEmit {
