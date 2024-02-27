@@ -1,6 +1,6 @@
 {
   "name": "vue3-procomponents",
-  "version": "2.0.2",
+  "version": "2.1.1",
   "scripts": {
     "dev": "vite",
     "build": "run-p \"build-only {@}\" --",
@@ -24,7 +24,7 @@
     "dayjs": "^1.11.10",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5",
-    "vue3-procomponents": "^2.0.2"
+    "vue3-procomponents": "^2.1.1"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
