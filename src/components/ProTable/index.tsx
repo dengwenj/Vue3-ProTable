@@ -682,7 +682,7 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
         if (!isFistFilter) {
           filterList = data.filter((item) => {
             for (const itex of filters[key]) {
-              if ((item[key] || '') === itex) {
+              if ((String(item[key]) || '').includes(itex)) {
                 return item
               }
             }
@@ -693,8 +693,7 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
         } else {
           filterList = filterList.filter((item) => {
             for (const itex of filters[key]) {
-              // (item[key] || '').includes(itex)
-              if ((item[key] || '') === itex) {
+              if ((String(item[key]) || '').includes(itex)) {
                 return item
               }
             }
@@ -805,9 +804,22 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
           }
           return b[item.dataIndex as string] - a[item.dataIndex as string]
         })
+        .map((item, index) => {
+          return {
+            ...item,
+            idx: index
+          }
+        })
     } else {
       // 源数据
-      dataSource = finallyDataSource.value.sort((a, b) => a.originIdx - b.originIdx)
+      dataSource = finallyDataSource.value
+        .sort((a, b) => a.originIdx - b.originIdx)
+        .map((item, index) => {
+          return {
+            ...item,
+            idx: index
+          }
+        })
     }
 
     finallyDataSource.value = [...dataSource]

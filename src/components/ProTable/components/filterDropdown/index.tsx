@@ -49,7 +49,7 @@ export default defineComponent<FilterDropdownProps>(function FilterDropdown(_, {
     inputVal.value = e.target.value!
 
     if (e.target.value) {
-      filterData.value = attrs.column!.customFilters!.filter((item) => item.includes(e.target.value!))
+      filterData.value = attrs.column!.customFilters!.filter((item) => String(item).includes(e.target.value!))
     } else {
       filterData.value = attrs.column!.customFilters!
     }

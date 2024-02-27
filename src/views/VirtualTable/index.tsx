@@ -65,7 +65,8 @@ export default defineComponent(function VirtualTable() {
         virtualSort: true,
         valueIsNumber: true,
         width: 100,
-        hideInSearch: true
+        hideInSearch: true,
+        customFilterDropdown: true
       },
       {
         title: '电话',
