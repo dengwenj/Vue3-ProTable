@@ -214,7 +214,11 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
    */
   watch(() => attrs.columns, () => {
     // 要展示的 table 列
-    notHideInTableColumns.value = attrs.columns?.filter((item) => { if (!item.hideInTable) return item }) || []
+    notHideInTableColumns.value = attrs.columns?.filter((item) => {
+      if (item?.children && item.children.length > 0) { item.children = item.children.filter((v) => { if (!v.hideInTable) return v }) }
+      if (!item.hideInTable) return item
+    }) || []
+
     // 要展示的 form 表单
     notHideInSearchColumns.value = attrs.columns?.filter((item) => { if (!item.hideInSearch) return item }) || []
 
