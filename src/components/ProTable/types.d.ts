@@ -1,6 +1,6 @@
 /**
  * @date 2023-06-06 PM 19:55
- * @author 邓文杰
+ * @author 朴睦
  * @description PropTable 类型
  */
 import type { 

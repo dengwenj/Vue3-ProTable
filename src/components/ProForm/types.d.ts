@@ -1,6 +1,6 @@
 /**
  * @date 2023-06-07 AM 10:24
- * @author 邓文杰
+ * @author 朴睦
  * @description ProForm 组件类型
  */
 import type { FormProps } from "ant-design-vue"

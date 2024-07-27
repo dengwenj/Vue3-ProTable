@@ -1,6 +1,6 @@
 /**
  * @date 2023-06-26 AM 10:28
- * @author 邓文杰
+ * @author 朴睦
  * @description 单元格文本可复制
  */
 import { defineComponent, ref } from 'vue'

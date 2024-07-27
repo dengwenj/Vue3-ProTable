@@ -1,6 +1,6 @@
 /**
  * @date 2023-07-08 PM 23:48
- * @author 邓文杰
+ * @author 朴睦
  * @description 虚拟列表封装
  */
 import { defineComponent, useAttrs, type StyleValue, computed, onMounted, ref, watch } from "vue"

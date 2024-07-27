@@ -1,6 +1,6 @@
 /**
  * @date 2023-07-15 PM 19:43
- * @author 邓文杰
+ * @author 朴睦
  * @description 列设置
  */
 import { defineComponent, useAttrs } from "vue"
