@@ -30,7 +30,7 @@ import ColumnSetting from "./components/ColumnSetting"
 import RightClickMenu from "./components/RightClickMenu"
 import useTableHeight from "./hooks/useTableHight"
 import useBatchCopy from "./hooks/useBatchCopy"
-import { formatNumber, stringDateFormat } from "./utils"
+import { formatNumber, stringDateFormat, Constants } from "./utils"
 import { SortOrder, ThemeColor } from "./conf"
 import './index.less'
 
@@ -66,8 +66,8 @@ export default defineComponent<PMProTableProps>(function PMProTable(_, {
     isSearch = true
   } = attrs
 
-  const current = ref(1)
-  const pageSize = ref(10)
+  const current = ref(Constants.current)
+  const pageSize = ref(Constants.pageSize)
   // 最开始的源数据，在用虚拟列表的时候，筛选时有用
   const originDataSource = ref<Record<string, any>[]>(isVirtual ? attrs.dataSource || [] : [])
   // 请求的源数据

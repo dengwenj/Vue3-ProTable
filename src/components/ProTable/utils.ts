@@ -93,3 +93,8 @@ export function fnCopy(copyText: string) {
     })
   }
 }
+
+export class Constants {
+  public static current: number = 1;
+  public static pageSize: number = 10;
+}
