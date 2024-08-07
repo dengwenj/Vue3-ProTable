@@ -258,7 +258,7 @@ export default defineComponent(function AdvancedTable() {
 ```
 
 #### .vue 方式
-**主要📢：属性尽量写成驼峰式的方式，保持和定义的属性一致，以免出现 bug**
+**注意📢：属性尽量写成驼峰式的方式，保持和定义的属性一致，以免出现 bug**
 ```vue
 <script setup lang="ts">
 import { ProTable } from '@/components'
