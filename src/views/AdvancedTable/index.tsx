@@ -107,7 +107,8 @@ export default defineComponent(function AdvancedTable() {
       children: [
         {
           title: "哈哈",
-          dataIndex: "hh"
+          dataIndex: "hh",
+          hideInTable: true
         },
         {
           title: "嘻嘻",
