@@ -9,6 +9,10 @@ const menuList: ItemType[] = [
     key: '/virtualtable',
     label: '虚拟表格',
   },
+  {
+    key: '/vuefile',
+    label: '.vue 方式'
+  }
 ]
 
 export default menuList
