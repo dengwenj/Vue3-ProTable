@@ -4,7 +4,6 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
@@ -16,14 +15,6 @@ export default defineConfig({
     }
   },
   // 发布 npm 包时的打包
-  // build: {
-  //   outDir: 'lib',
-  //   lib: {
-  //     entry: './src/components/index.ts',
-  //     name: 'protable',
-  //     fileName: 'protable',
-  //   },
-  // }
   // build: {
   //   outDir: 'lib',
   //   // cssCodeSplit: true, // 强制内联CSS

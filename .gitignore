@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 .DS_Store
 dist
+# 发布到 npm 时要把 lib 注释掉，反之
 lib
 dist-ssr
 coverage
