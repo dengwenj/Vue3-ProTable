@@ -285,7 +285,7 @@ const columns = computed<TableColumnsType>(() => {
   <div>
     <ProTable 
       :columns="columns"
-      :data-source="dataSource"
+      :dataSource="dataSource"
       :search="{
         isCollapsed: false
       }"
