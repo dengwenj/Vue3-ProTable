@@ -4,9 +4,9 @@
  * @description 虚拟表格
  */
 import { computed, defineComponent, onMounted, ref } from "vue"
-import { ProTable } from "vue3-procomponents"
 import { Button, Select, Space, Tag } from "ant-design-vue"
 import dayjs from "dayjs"
+import { ProTable } from "@/components"
 
 import type { PMProTableInstance, TableColumnsType } from "@/components/ProTable/types"
 

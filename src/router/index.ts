@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import AdvancedTable from '@/views/AdvancedTable'
-import VirtualTable from '@/views/VirtualTable'
-import VueFile from '@/views/VueFile/index.vue';
+// import AdvancedTable from '@/views/AdvancedTable'
+// import VirtualTable from '@/views/VirtualTable'
+// import VueFile from '@/views/VueFile/index.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,15 +13,15 @@ const router = createRouter({
     },
     {
       path: '/advancedtable',
-      component: AdvancedTable
+      component: import('@/views/AdvancedTable')
     },
     {
       path: '/virtualtable',
-      component: VirtualTable
+      component: import('@/views/VirtualTable')
     },
     {
       path: '/vuefile',
-      component: VueFile
+      component: import('@/views/VueFile/index.vue')
     }
   ]
 })
