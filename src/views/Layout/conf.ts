@@ -12,6 +12,14 @@ const menuList: ItemType[] = [
   {
     key: '/vuefile',
     label: '.vue 方式'
+  },
+  {
+    key: '/vlist',
+    label: '虚拟列表(方式一)'
+  },
+  {
+    key: '/vlist2',
+    label: '虚拟列表(方式二)'
   }
 ]
 

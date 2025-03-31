@@ -22,6 +22,14 @@ const router = createRouter({
     {
       path: '/vuefile',
       component: import('@/views/VueFile/index.vue')
+    },
+    {
+      path: '/vlist',
+      component: import('@/views/VList/index.vue')
+    },
+    {
+      path: '/vlist2',
+      component: import('@/views/VList2/index.vue')
     }
   ]
 })
