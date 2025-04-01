@@ -30,6 +30,10 @@ const router = createRouter({
     {
       path: '/vlist2',
       component: import('@/views/VList2/index.vue')
+    },
+    {
+      path: '/vlist3',
+      component: import('@/views/VList3/index.vue')
     }
   ]
 })

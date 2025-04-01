@@ -20,6 +20,10 @@ const menuList: ItemType[] = [
   {
     key: '/vlist2',
     label: '虚拟列表(方式二)'
+  },
+  {
+    key: '/vlist3',
+    label: '虚拟列表(动态高度)'
   }
 ]
 
